@@ -20,6 +20,7 @@
   --radius-pill: 999px;
 
   /* Spacing (4px scale) */
+  --content-margin: 120px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
