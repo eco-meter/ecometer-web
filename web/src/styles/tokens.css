@@ -1,0 +1,54 @@
+:root {
+  /* Colors */
+  --color-brand-green: #0ea54e;
+  --color-green-dark: #0b7d3c;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-cream: #efeee7;
+  --color-text: #141414;
+  --color-text-secondary: #5a5a52;
+  --color-border: #d8d4c8;
+
+  /* Typography */
+  --font-heading: "Fraunces", serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  /* Spacing (4px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Layout */
+  --nav-height: 76px;
+  --max-content-width: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  margin: 0;
+}
