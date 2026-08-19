@@ -1,4 +1,5 @@
 .nav {
+  background: var(--color-cream);
   height: var(--nav-height);
   border-bottom: 1px solid var(--color-border);
   display: flex;
@@ -16,11 +17,14 @@
 }
 
 .nav__logo {
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--color-text);
-  text-decoration: none;
+  display: block;
+  line-height: 0;
+}
+
+.nav__logo img {
+  width: 120px;
+  height: 60px;
+  display: block;
 }
 
 .nav__links {
@@ -32,7 +36,7 @@
 }
 
 .nav__links a {
-  color: var(--color-text);
+  color: var(--color-black);
   text-decoration: none;
   font-size: 14px;
 }
@@ -43,7 +47,7 @@
 
 .nav__cta {
   background: var(--color-brand-green);
-  color: var(--color-white);
+  color: var(--color-cream);
   border: none;
   border-radius: var(--radius-pill);
   padding: 12px 20px;

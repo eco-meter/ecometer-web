@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section className='hero'>
       <div className='hero__text'>
-        <h1>Discover the restaurant making a difference.</h1>
+        <h1>Discover the restaurants making a difference.</h1>
         <p>
           Real sustainability scores, built from real data. Find restaurants
           that back it up.

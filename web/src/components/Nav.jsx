@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 import "./Nav.css";
 
 export default function Nav() {
@@ -6,7 +7,7 @@ export default function Nav() {
     <nav className='nav'>
       <div className='nav__inner'>
         <Link to='/' className='nav__logo'>
-          EcoMeter
+          <img src={logo} alt='EcoMeter' />
         </Link>
 
         <div className='nav__links'>
