@@ -24,7 +24,13 @@ export default function Footer() {
         <span>
           &copy; {new Date().getFullYear()} EcoMeter. All rights reserved.
         </span>
-        <span>Design &amp; build: Jess Wilson</span>
+        <a
+          href='https://jessicapswilson.com'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          Built by Jess Wilson
+        </a>
       </div>
     </footer>
   );
