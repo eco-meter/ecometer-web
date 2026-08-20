@@ -1,4 +1,6 @@
 .restaurant-listings {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
   padding: 10px var(--content-margin);
   display: flex;
   flex-direction: column;
