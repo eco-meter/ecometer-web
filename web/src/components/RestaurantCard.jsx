@@ -1,14 +1,7 @@
-import ScoreRing from "./ScoreRing";
+import ScoreRing from "./ScoreRing.jsx";
 import "./RestaurantCard.css";
 
-export default function RestaurantCard({
-  image,
-  name,
-  tag,
-  food,
-  supplier,
-  packaging,
-}) {
+export default function RestaurantCard({ image, name, tag }) {
   return (
     <div className='restaurant-card'>
       <img src={image} alt={name} className='restaurant-card__image' />
@@ -17,9 +10,9 @@ export default function RestaurantCard({
         <h3 className='restaurant-card__name'>{name}</h3>
 
         <div className='restaurant-card__scores'>
-          <ScoreRing label='Food' value={food} />
-          <ScoreRing label='Supplier' value={supplier} />
-          <ScoreRing label='Packaging' value={packaging} />
+          <ScoreRing label='Food' percent={null} />
+          <ScoreRing label='Packaging' percent={null} />
+          <ScoreRing label='Suppliers' percent={null} />
         </div>
 
         <div className='restaurant-card__total-bar'>

@@ -10,26 +10,9 @@ const restaurants = [
     image: restaurant1,
     name: "Rocky Mountain Flatbread Company",
     tag: "Pizza • $$",
-    food: "TBD",
-    supplier: "TBD",
-    packaging: "TBD",
   },
-  {
-    image: restaurant2,
-    name: "Chickpea",
-    tag: "Vegan • $$",
-    food: "TBD",
-    supplier: "TBD",
-    packaging: "TBD",
-  },
-  {
-    image: restaurant3,
-    name: "Jamjar Canteen",
-    tag: "Lebanese • $$",
-    food: "TBD",
-    supplier: "TBD",
-    packaging: "TBD",
-  },
+  { image: restaurant2, name: "Chickpea", tag: "Vegan • $$" },
+  { image: restaurant3, name: "Jamjar Canteen", tag: "Lebanese • $$" },
 ];
 
 export default function RestaurantListings() {

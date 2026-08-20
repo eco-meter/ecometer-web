@@ -3,8 +3,8 @@ import "./Hero.css";
 
 export default function Hero() {
   return (
-    <section className='hero'>
-      <div className='hero__text'>
+    <div className='hero'>
+      <div className='hero__heading'>
         <h1>Discover the restaurants making a difference.</h1>
         <p>
           Real sustainability scores, built from real data. Find restaurants
@@ -12,9 +12,9 @@ export default function Hero() {
         </p>
       </div>
 
-      <div className='hero__globe'>
-        <img src={globeSrc} alt='' />
+      <div className='hero__globe-band'>
+        <img src={globeSrc} alt='' className='hero__globe' />
       </div>
-    </section>
+    </div>
   );
 }
