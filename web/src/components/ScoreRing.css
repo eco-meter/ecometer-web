@@ -26,12 +26,21 @@
 .score-ring__svg {
   width: 100%;
   height: 100%;
-  transform: rotate(-90deg);
+}
+
+.score-ring__outer-disc {
+  fill: #e8e5da;
+}
+
+.score-ring__inner-disc {
+  fill: #f4f3e8;
+  stroke: #000;
+  stroke-width: 1;
 }
 
 .score-ring__track {
   fill: var(--color-white);
-  stroke: var(--color-border);
+  stroke: var(--color-cream);
   stroke-width: 4;
 }
 
