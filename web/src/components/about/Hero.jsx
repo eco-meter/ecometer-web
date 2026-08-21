@@ -1,9 +1,12 @@
 import globeSrc from "../../assets/globe.svg";
+import heroBg from "../../assets/backgrounds/leaf.png";
 import "./Hero.css";
 
 export default function Hero() {
   return (
     <section className='about-hero'>
+      <img src={heroBg} alt='' className='about-hero__bg' />
+
       <div className='about-hero__copy'>
         <h1>
           Good food.

@@ -1,0 +1,115 @@
+.achievements {
+  background: var(--color-white);
+  padding: 96px var(--content-margin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+.achievements__heading-row {
+  max-width: var(--max-content-width);
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.achievements__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 620px;
+}
+
+.achievements__eyebrow {
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 1.56px;
+  color: #0b7d3c;
+  margin: 0;
+}
+
+.achievements__heading h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 44px;
+  color: #0e1c14;
+  margin: 0;
+}
+
+.achievements__intro {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #404740;
+  margin: 0;
+}
+
+.achievements__trophy {
+  width: 184px;
+  height: auto;
+  opacity: 0.8;
+  flex-shrink: 0;
+}
+
+.achievements__grid {
+  max-width: var(--max-content-width);
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.achievements__badge {
+  border: 1px solid #d9d6c9;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.achievements__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-brand-green);
+  flex-shrink: 0;
+}
+
+.achievements__badge h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 20px;
+  color: #0e1c14;
+  margin: 0 0 6px;
+}
+
+.achievements__badge p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: #404740;
+  margin: 0;
+}
+
+.achievements__discover {
+  background: transparent;
+  border: 1.5px solid #0e1c14;
+  border-radius: var(--radius-md);
+  color: #0e1c14;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 16px;
+  padding: 16px 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .achievements__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
