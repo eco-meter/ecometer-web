@@ -32,11 +32,17 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
   border: none;
-  background: none;
+  background: var(--color-cream);
+  color: var(--color-brand-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding: 0;
-  color: var(--color-brand-green);
 }
 
 .restaurant-listings__arrow:first-child {

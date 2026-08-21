@@ -22,7 +22,7 @@ export default function RestaurantListings() {
 
       <div className='restaurant-listings__row-wrapper'>
         <button className='restaurant-listings__arrow' aria-label='Previous'>
-          <Icon icon='mdi:arrow-left-circle-outline' width={90} height={90} />
+          <Icon icon='mdi:arrow-left' width={28} height={28} />
         </button>
 
         <div className='restaurant-listings__row'>
@@ -32,7 +32,7 @@ export default function RestaurantListings() {
         </div>
 
         <button className='restaurant-listings__arrow' aria-label='Next'>
-          <Icon icon='mdi:arrow-right-circle-outline' width={90} height={90} />
+          <Icon icon='mdi:arrow-right' width={28} height={28} />
         </button>
       </div>
 
