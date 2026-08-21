@@ -1,0 +1,51 @@
+.mission {
+  background: #e3f5ea;
+  width: 100%;
+  padding: 64px var(--content-margin);
+  margin-bottom: 80px;
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mission__content {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.mission__content h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 52px;
+  color: var(--color-black);
+  margin: 0;
+}
+
+.mission__content p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-black);
+  margin: 0;
+}
+
+.mission__button {
+  background: var(--color-cream);
+  border: 1px solid #08572a;
+  border-radius: var(--radius-md);
+  color: #08572a;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 20px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
