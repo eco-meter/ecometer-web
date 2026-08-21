@@ -1,4 +1,4 @@
-import globeSrc from "../assets/globe.svg";
+import globeSrc from "../../assets/globe.svg";
 import "./Hero.css";
 
 export default function Hero() {
