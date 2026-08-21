@@ -65,7 +65,7 @@ const moreAchievements = [
 function Badge({ title, body }) {
   return (
     <div className='achievements__badge'>
-      <Icon icon='mdi:hexagon' className='achievements__icon'></Icon>
+      <Icon icon='mdi:hexagon' className='achievements__icon' />
       <div>
         <h3>{title}</h3>
         <p>{body}</p>
@@ -84,8 +84,8 @@ export default function Achievements() {
           <p className='achievements__eyebrow'>BEYOND THE SCORE</p>
           <h2>Achievements restaurants can earn</h2>
           <p className='achievements__intro'>
-            On top of their score, restaurants unlock achievements for further.
-            Achievements show up on their profiles and on the map.
+            On top of their score, restaurants unlock achievements for going
+            further. Achievements show up on their profile and on the map.
           </p>
         </div>
         <img src={trophy} alt='' className='achievements__trophy' />

@@ -73,6 +73,10 @@
   align-items: flex-start;
 }
 
+.achievements__badge--wide {
+  grid-column: span 2;
+}
+
 .achievements__icon {
   width: 48px;
   height: 48px;
