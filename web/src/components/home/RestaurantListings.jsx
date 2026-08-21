@@ -1,8 +1,8 @@
 import { Icon } from "@iconify/react";
 import RestaurantCard from "./RestaurantCard.jsx";
-import restaurant1 from "../assets/restaurants/restaurant-1.png";
-import restaurant2 from "../assets/restaurants/restaurant-2.png";
-import restaurant3 from "../assets/restaurants/restaurant-3.png";
+import restaurant1 from "../../assets/restaurants/restaurant-1.png";
+import restaurant2 from "../../assets/restaurants/restaurant-2.png";
+import restaurant3 from "../../assets/restaurants/restaurant-3.png";
 import "./RestaurantListings.css";
 
 const restaurants = [
