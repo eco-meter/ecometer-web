@@ -1,4 +1,4 @@
-import ctaBg from "../../assets/backgrounds/your-next-favourite.jpg";
+import ctaBg from "../../assets/backgrounds/your-next-favourite.webp";
 import "./Cta.css";
 
 export default function Cta() {

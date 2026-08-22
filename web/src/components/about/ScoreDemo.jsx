@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import scoreDemoBg from "../../assets/backgrounds/how-a-score.jpg";
+import scoreDemoBg from "../../assets/backgrounds/how-a-score.webp";
 import "./ScoreDemo.css";
 
 const messages = {
