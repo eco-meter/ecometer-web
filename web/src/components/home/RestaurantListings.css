@@ -45,6 +45,15 @@
   padding: 0;
 }
 
+.restaurant-listings__arrow:hover {
+  background: #e3f5ea;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.restaurant-listings__arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
 .restaurant-listings__arrow:first-child {
   left: -110px;
 }

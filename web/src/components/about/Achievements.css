@@ -112,6 +112,15 @@
   cursor: pointer;
 }
 
+.achievements__discover:hover {
+  background: #0e1c14;
+  color: var(--color-cream);
+}
+
+.achievements__hide:hover {
+  color: var(--color-green-dark);
+}
+
 @media (max-width: 900px) {
   .achievements__grid {
     grid-template-columns: repeat(2, 1fr);

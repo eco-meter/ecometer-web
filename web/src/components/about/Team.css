@@ -55,12 +55,17 @@
   gap: 14px;
 }
 
+.team__member:hover .team__photo {
+  border-color: var(--color-brand-green);
+}
+
 .team__photo {
   background: var(--color-cream);
   border: 1px solid var(--color-border);
   border-radius: 18px;
   height: 300px;
   width: 100%;
+  transition: border-color 0.2s ease;
 }
 
 .team__info {

@@ -65,6 +65,10 @@
   cursor: pointer;
 }
 
+.about-hero__btn-primary:hover {
+  background: var(--color-green-dark);
+}
+
 .about-hero__btn-secondary {
   background: transparent;
   color: #0e1c14;
@@ -75,6 +79,16 @@
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
+}
+
+.about-hero__btn-secondary:hover {
+  background: #0e1c14;
+  color: var(--color-cream);
+}
+
+.about-hero__btn-primary:active,
+.about-hero__btn-secondary:active {
+  transform: scale(0.97);
 }
 
 .about-hero__globe-box {

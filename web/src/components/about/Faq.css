@@ -37,6 +37,10 @@
   text-align: left;
 }
 
+.faq__question:hover span:first-child {
+  color: var(--color-brand-green);
+}
+
 .faq__question span:first-child {
   font-family: var(--font-body);
   font-weight: 600;
@@ -51,6 +55,7 @@
   color: var(--color-brand-green);
   flex-shrink: 0;
   margin-left: 16px;
+  transition: transform 0.2s ease;
 }
 
 .faq__answer {

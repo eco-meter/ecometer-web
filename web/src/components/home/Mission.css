@@ -49,3 +49,8 @@
   gap: 10px;
   cursor: pointer;
 }
+
+.mission__button:hover {
+  background: var(--color-brand-green);
+  color: var(--color-cream);
+}

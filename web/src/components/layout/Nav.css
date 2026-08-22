@@ -39,6 +39,7 @@
   color: var(--color-black);
   text-decoration: none;
   font-size: 14px;
+  transition: color 0.2s ease;
 }
 
 .nav__links a:hover {
@@ -54,6 +55,14 @@
   font-family: var(--font-body);
   font-size: 14px;
   cursor: pointer;
+}
+
+.nav__cta:hover {
+  background: var(--color-green-dark);
+}
+
+.nav__cta:active {
+  transform: scale(0.97);
 }
 
 .nav__hamburger {
