@@ -1,0 +1,79 @@
+.values {
+  background: var(--color-cream);
+  padding: 96px var(--content-margin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+.values__heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.values__eyebrow {
+  font-family: var(--font-body);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 1.56px;
+  color: #0b7d3c;
+  margin: 0;
+}
+
+.values__heading h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 40px;
+  color: var(--color-black);
+  margin: 0;
+}
+
+.values__subline {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--color-black);
+  margin: 0;
+}
+
+.values__row {
+  max-width: var(--max-content-width);
+  width: 100%;
+  display: flex;
+  gap: 24px;
+}
+
+.values__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.values__icon {
+  width: 48px;
+  height: 48px;
+  color: var(--color-brand-green);
+}
+
+.values__item h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.values__item p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
