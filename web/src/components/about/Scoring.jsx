@@ -1,4 +1,4 @@
-import scoringBg from "../../assets/backgrounds/what-we-look-at-first.jpg";
+import scoringBg from "../../assets/backgrounds/what-we-look-at-first.webp";
 import "./Scoring.css";
 
 export default function Scoring() {
