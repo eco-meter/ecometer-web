@@ -3,6 +3,7 @@ import Scoring from "../components/about/Scoring";
 import Achievements from "../components/about/Achievements";
 import ScoreDemo from "../components/about/ScoreDemo";
 import Team from "../components/about/Team";
+import Faq from "../components/about/Faq";
 
 export default function About() {
   return (
@@ -12,6 +13,7 @@ export default function About() {
       <Achievements />
       <ScoreDemo />
       <Team />
+      <Faq />
     </>
   );
 }
