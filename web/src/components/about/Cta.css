@@ -45,6 +45,10 @@
 .about-cta__button {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: var(--color-brand-green);
   color: var(--color-cream);
   border: none;

@@ -54,6 +54,10 @@
 }
 
 .about-hero__btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: var(--color-brand-green);
   color: var(--color-cream);
   border: none;
@@ -70,6 +74,10 @@
 }
 
 .about-hero__btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: transparent;
   color: #0e1c14;
   border: 1.5px solid #0e1c14;

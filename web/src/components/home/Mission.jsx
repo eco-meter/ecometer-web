@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "./Mission.css";
 
@@ -13,10 +14,10 @@ export default function Mission() {
         </p>
       </div>
 
-      <button className='mission__button'>
+      <Link to='/about' className='mission__button'>
         Our Story
         <Icon icon='mdi:arrow-right' width={16} height={16} />
-      </button>
+      </Link>
     </section>
   );
 }

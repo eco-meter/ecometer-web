@@ -24,7 +24,7 @@ export default function RestaurantListings() {
     const row = rowRef.current;
     if (!row) return;
     const onScroll = () => {
-      const cardWidth = row.firstElementChild?.off;
+      const cardWidth = row.firstElementChild?.offsetWidth;
       const gap = 32;
       const index = Math.round(row.scrollLeft / (cardWidth + gap));
       setActiveIndex(Math.min(index, restaurants.length - 1));

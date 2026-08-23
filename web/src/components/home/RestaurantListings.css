@@ -73,6 +73,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--color-border);
+  cursor: pointer;
 }
 
 .dot--active {

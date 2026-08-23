@@ -91,3 +91,7 @@
     padding: 48px var(--content-margin);
   }
 }
+
+.faq__question:active {
+  opacity: 0.7;
+}
