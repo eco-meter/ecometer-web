@@ -97,3 +97,9 @@
     flex: 1 1 45%;
   }
 }
+
+@media (max-width: 500px) {
+  .team__member {
+    flex: 1 1 100%;
+  }
+}
