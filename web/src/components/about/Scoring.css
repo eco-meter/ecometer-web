@@ -97,3 +97,23 @@
   color: #404740;
   margin: 0;
 }
+
+@media (max-width: 900px) {
+  .scoring {
+    padding: 64px var(--content-margin);
+  }
+
+  .scoring__heading {
+    padding: 28px 32px;
+  }
+
+  .scoring__heading h2 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 860px) {
+  .scoring__cards {
+    flex-direction: column;
+  }
+}

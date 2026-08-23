@@ -63,3 +63,17 @@
 .about-cta__button:active {
   transform: scale(0.97);
 }
+
+@media (max-width: 600px) {
+  .about-cta {
+    padding: 64px var(--content-margin);
+  }
+
+  .about-cta h2 {
+    font-size: 30px;
+  }
+
+  .about-cta p {
+    font-size: 15px;
+  }
+}

@@ -122,7 +122,34 @@
 }
 
 @media (max-width: 900px) {
+  .achievements {
+    padding: 64px var(--content-margin);
+  }
+
+  .achievements__heading-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .achievements__trophy {
+    display: none;
+  }
+
+  .achievements__heading h2 {
+    font-size: 32px;
+  }
+
   .achievements__grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .achievements__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .achievements__badge--wide {
+    grid-column: span 1;
   }
 }

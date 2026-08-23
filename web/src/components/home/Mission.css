@@ -54,3 +54,15 @@
   background: var(--color-brand-green);
   color: var(--color-cream);
 }
+
+@media (max-width: 600px) {
+  .mission {
+    padding: 48px var(--content-margin);
+    margin-top: 56px;
+    margin-bottom: 56px;
+  }
+
+  .mission__content h2 {
+    font-size: 32px;
+  }
+}

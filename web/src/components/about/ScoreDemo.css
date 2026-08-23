@@ -217,3 +217,30 @@
   border-radius: var(--radius-sm);
   margin: 0;
 }
+
+@media (max-width: 900px) {
+  .score-demo__heading {
+    padding: 24px 28px;
+  }
+
+  .score-demo__heading h2 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 720px) {
+  .score-demo__card {
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .score-demo__preview {
+    width: 100%;
+    height: auto;
+    padding: 20px;
+  }
+
+  .score-demo__preview-number {
+    font-size: 64px;
+  }
+}

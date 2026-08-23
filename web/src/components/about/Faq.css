@@ -67,3 +67,25 @@
   margin: 12px 0 0;
   white-space: pre-line;
 }
+
+@media (max-width: 1100px) {
+  .faq {
+    padding: 96px 96px;
+  }
+}
+
+@media (max-width: 900px) {
+  .faq {
+    padding: 64px var(--content-margin);
+  }
+
+  .faq h2 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq__question span:first-child {
+    font-size: 16px;
+  }
+}
