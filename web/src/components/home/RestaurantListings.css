@@ -78,3 +78,27 @@
 .dot--active {
   background: var(--color-brand-green);
 }
+
+@media (max-width: 900px) {
+  .restaurant-listings__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .restaurant-listings__heading {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 640px) {
+  .restaurant-listings__row {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-listings__arrow {
+    display: none;
+  }
+
+  .restaurant-listings__heading {
+    font-size: 30px;
+  }
+}
