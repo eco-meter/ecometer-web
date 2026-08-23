@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import globeSrc from "../../assets/globe.svg";
 import heroBg from "../../assets/backgrounds/leaf.png";
 import "./Hero.css";
@@ -23,12 +24,12 @@ export default function Hero() {
           Our scores are based on real action and data, not just promises.
         </p>
         <div className='about-hero__buttons'>
-          <button className='about-hero__btn-primary'>
+          <a href='#score-demo' className='about-hero__btn-primary'>
             See how scoring works
-          </button>
-          <button className='about-hero__btn-secondary'>
+          </a>
+          <Link to='/' className='about-hero__btn-secondary'>
             Browse restaurants
-          </button>
+          </Link>
         </div>
       </div>
 

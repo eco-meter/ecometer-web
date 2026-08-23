@@ -4,6 +4,9 @@
   border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .nav__inner {
@@ -78,14 +81,65 @@
   width: 22px;
   height: 2px;
   background: var(--color-text);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.nav__hamburger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav__hamburger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__hamburger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 @media (max-width: 768px) {
-  .nav__links,
-  .nav__cta {
-    display: none;
+  .nav__inner {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
   }
+
+  .nav__cta {
+    display: none; /* nowq lives inside the dropdown*/
+  }
+
   .nav__hamburger {
     display: flex;
+  }
+
+  .nav__links {
+    display: flex;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--color-cream);
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-4) var(--content-margin);
+    gap: var(--space-4);
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s;
+  }
+
+  .nav__links--open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__links .nav__cta {
+    display: inline-flex;
+    justify-content: center;
   }
 }

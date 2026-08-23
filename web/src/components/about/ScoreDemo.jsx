@@ -113,6 +113,7 @@ export default function ScoreDemo() {
 
   return (
     <section
+      id='score-demo'
       className='score-demo'
       style={{ backgroundImage: `url(${scoreDemoBg})` }}
     >

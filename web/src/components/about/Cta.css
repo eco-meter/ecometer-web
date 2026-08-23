@@ -28,7 +28,7 @@
   z-index: 1;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 48px;
+  font-size: clamp(26px, 5vw + 1rem, 48px);
   color: var(--color-brand-green);
   margin: 0;
 }
@@ -45,6 +45,10 @@
 .about-cta__button {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: var(--color-brand-green);
   color: var(--color-cream);
   border: none;
@@ -62,4 +66,20 @@
 
 .about-cta__button:active {
   transform: scale(0.97);
+}
+
+@media (max-width: 600px) {
+  .about-cta {
+    padding: 64px var(--content-margin);
+  }
+
+  .about-cta p {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-cta {
+    padding: 48px var(--content-margin);
+  }
 }

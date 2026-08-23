@@ -4,6 +4,7 @@ import "./Scoring.css";
 export default function Scoring() {
   return (
     <section
+      id='scoring'
       className='scoring'
       style={{ backgroundImage: `url(${scoringBg})` }}
     >

@@ -27,7 +27,7 @@
 .values__heading h2 {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 40px;
+  font-size: clamp(26px, 4vw + 1rem, 40px);
   color: var(--color-black);
   margin: 0;
 }
@@ -76,4 +76,17 @@
   line-height: 1.6;
   color: var(--color-text-secondary);
   margin: 0;
+}
+
+@media (max-width: 700px) {
+  .values__row {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .values {
+    padding: 48px var(--content-margin);
+  }
 }
