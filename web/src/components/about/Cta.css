@@ -28,7 +28,7 @@
   z-index: 1;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 48px;
+  font-size: clamp(26px, 5vw + 1rem, 48px);
   color: var(--color-brand-green);
   margin: 0;
 }
@@ -69,11 +69,13 @@
     padding: 64px var(--content-margin);
   }
 
-  .about-cta h2 {
-    font-size: 30px;
-  }
-
   .about-cta p {
     font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-cta {
+    padding: 48px var(--content-margin);
   }
 }

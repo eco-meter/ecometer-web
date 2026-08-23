@@ -34,7 +34,7 @@
 .score-demo__heading h2 {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 40px;
+  font-size: clamp(26px, 4vw + 1rem, 40px);
   color: #0e1c14;
   margin: 0;
 }
@@ -222,10 +222,6 @@
   .score-demo__heading {
     padding: 24px 28px;
   }
-
-  .score-demo__heading h2 {
-    font-size: 30px;
-  }
 }
 
 @media (max-width: 720px) {
@@ -242,5 +238,11 @@
 
   .score-demo__preview-number {
     font-size: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  .score-demo {
+    padding: 48px var(--content-margin);
   }
 }

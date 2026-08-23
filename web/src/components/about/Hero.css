@@ -34,7 +34,7 @@
 .about-hero__copy h1 {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 64px;
+  font-size: clamp(28px, 7vw + 1rem, 64px);
   line-height: 1.04;
   color: #0e1c14;
   margin: 0;
@@ -130,10 +130,6 @@
 }
 
 @media (max-width: 600px) {
-  .about-hero__copy h1 {
-    font-size: 36px;
-  }
-
   .about-hero__buttons {
     flex-direction: column;
     width: 100%;

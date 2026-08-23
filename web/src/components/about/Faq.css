@@ -10,7 +10,7 @@
 .faq h2 {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 40px;
+  font-size: clamp(24px, 4vw + 1rem, 40px);
   color: #0e1c14;
   margin: 0;
 }
@@ -78,14 +78,16 @@
   .faq {
     padding: 64px var(--content-margin);
   }
-
-  .faq h2 {
-    font-size: 30px;
-  }
 }
 
 @media (max-width: 480px) {
   .faq__question span:first-child {
     font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq {
+    padding: 48px var(--content-margin);
   }
 }

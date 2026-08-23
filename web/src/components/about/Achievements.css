@@ -36,7 +36,7 @@
 .achievements__heading h2 {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 44px;
+  font-size: clamp(26px, 4vw + 1rem, 44px);
   color: #0e1c14;
   margin: 0;
 }
@@ -135,10 +135,6 @@
     display: none;
   }
 
-  .achievements__heading h2 {
-    font-size: 32px;
-  }
-
   .achievements__grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -151,5 +147,11 @@
 
   .achievements__badge--wide {
     grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievements {
+    padding: 48px var(--content-margin);
   }
 }
