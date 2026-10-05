@@ -22,7 +22,6 @@ ecometer/
 │ ├── restaurants/ # restaurant list/detail views
 │ ├── scoring/ # scoring category display
 │ ├── achievements/ # achievement badges/display
-│ └── admin/ # gated admin UI for Ewan
 ├── lib/
 │ ├── supabase.js # Supabase client init
 │ └── queryClient.js # TanStack Query client config
