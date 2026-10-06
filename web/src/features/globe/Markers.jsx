@@ -14,7 +14,7 @@ export function Markers({ restaurants, regions, radius }) {
     );
 
     return restaurants.flatMap((restaurant) => {
-      const slug = restaurants.region?.slug;
+      const slug = restaurant.region?.slug;
       const region = regionsBySlug.get(slug);
       const placement = REGION_PLACEMENTS[slug];
 
