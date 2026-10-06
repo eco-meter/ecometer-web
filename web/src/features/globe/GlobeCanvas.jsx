@@ -12,8 +12,10 @@ function Planet() {
   );
 }
 
-function World() {
-  const { pitchRef, yawRef } = useSpin();
+function World({ reducedMotion }) {
+  const { pitchRef, yawRef } = useSpin({
+    damping: reducedMotion ? 30 : 3.5,
+  });
 
   return (
     <group ref={pitchRef}>
@@ -24,7 +26,7 @@ function World() {
   );
 }
 
-export default function GlobeCanvas() {
+export default function GlobeCanvas({ reducedMotion = false }) {
   return (
     <Canvas
       frameloop='demand'
@@ -34,7 +36,7 @@ export default function GlobeCanvas() {
     >
       <hemisphereLight args={["#efeee7", "#08572a", 1.2]} />
       <directionalLight position={[4, 5, 3]} intensity={2.2} />
-      <World />
+      <World reducedMotion={reducedMotion} />
     </Canvas>
   );
 }

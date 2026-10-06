@@ -1,5 +1,6 @@
 import { Component, Suspense, lazy, useState } from "react";
 import "./globe.css";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 const GlobeCanvas = lazy(() => import("./GlobeCanvas.jsx"));
 
@@ -29,6 +30,7 @@ class GlobeErrorBoundary extends Component {
 }
 
 export default function GlobeSection({ fallbackSrc }) {
+  const reducedMotion = usePrefersReducedMotion();
   const [webglSupported] = useState(hasWebGL);
 
   const fallback = (
@@ -40,7 +42,7 @@ export default function GlobeSection({ fallbackSrc }) {
       {webglSupported ? (
         <GlobeErrorBoundary fallback={fallback}>
           <Suspense fallback={fallback}>
-            <GlobeCanvas />
+            <GlobeCanvas reducedMotion={reducedMotion} />
           </Suspense>
         </GlobeErrorBoundary>
       ) : (
