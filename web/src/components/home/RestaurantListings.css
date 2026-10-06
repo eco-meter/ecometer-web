@@ -116,3 +116,13 @@
     display: none;
   }
 }
+
+.restaurant-listings__message {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+button.dot {
+  border: none;
+  padding: 0;
+}

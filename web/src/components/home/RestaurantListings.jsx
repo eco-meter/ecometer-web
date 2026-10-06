@@ -1,42 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import RestaurantCard from "./RestaurantCard.jsx";
-import restaurant1 from "../../assets/restaurants/restaurant-1.webp";
-import restaurant2 from "../../assets/restaurants/restaurant-2.webp";
-import restaurant3 from "../../assets/restaurants/restaurant-3.webp";
+import { useRestaurants } from "../../hooks/useRestaurants.js";
 import "./RestaurantListings.css";
 
-const restaurants = [
-  {
-    image: restaurant1,
-    name: "Rocky Mountain Flatbread Company",
-    tag: "Pizza • $$",
-  },
-  { image: restaurant2, name: "Chickpea", tag: "Vegan • $$" },
-  { image: restaurant3, name: "Jamjar Canteen", tag: "Lebanese • $$" },
-];
-
 export default function RestaurantListings() {
+  const { data: restaurants = [], isLoading, error } = useRestaurants();
   const rowRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const count = restaurants.length;
 
   useEffect(() => {
     const row = rowRef.current;
-    if (!row) return;
+    if (!row || count === 0) return;
     const onScroll = () => {
       const cardWidth = row.firstElementChild?.offsetWidth;
       const gap = 32;
       const index = Math.round(row.scrollLeft / (cardWidth + gap));
-      setActiveIndex(Math.min(index, restaurants.length - 1));
+      setActiveIndex(Math.min(index, count - 1));
     };
     row.addEventListener("scroll", onScroll, { passive: true });
     return () => row.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [count]);
 
   const scrollToIndex = (i) => {
-    const row = rowRef.current;
-    if (!row) return;
-    const card = row.children[i];
+    const card = rowRef.current?.children[i];
     card?.scrollIntoView({
       behavior: "smooth",
       inline: "center",
@@ -48,41 +36,72 @@ export default function RestaurantListings() {
     <section className='restaurant-listings'>
       <h2 className='restaurant-listings__heading'>Restaurants near you</h2>
 
-      <div className='restaurant-listings__row-wrapper'>
-        <button
-          className='restaurant-listings__arrow'
-          aria-label='Previous'
-          onClick={() => scrollToIndex(Math.max(activeIndex - 1, 0))}
-        >
-          <Icon icon='mdi:arrow-left' width={28} height={28} />
-        </button>
+      {error ? (
+        <p className='restaurant-listings__message'>
+          Restaurants couldn’t load. Refresh the page to try again.
+        </p>
+      ) : !isLoading && count === 0 ? (
+        <p className='restaurant-listings__message'>
+          No restaurants listed yet. Check back soon.
+        </p>
+      ) : (
+        <>
+          <div className='restaurant-listings__row-wrapper'>
+            {count > 0 && (
+              <button
+                className='restaurant-listings__arrow'
+                aria-label='Previous restaurant'
+                onClick={() => scrollToIndex(Math.max(activeIndex - 1, 0))}
+              >
+                <Icon icon='mdi:arrow-left' width={28} height={28} />
+              </button>
+            )}
 
-        <div className='restaurant-listings__row' ref={rowRef}>
-          {restaurants.map((r) => (
-            <RestaurantCard key={r.name} {...r} />
-          ))}
-        </div>
+            <div className='restaurant-listings__row' ref={rowRef}>
+              {isLoading
+                ? [0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className='restaurant-card restaurant-card--skeleton'
+                      aria-hidden='true'
+                    />
+                  ))
+                : restaurants.map((restaurant) => (
+                    <RestaurantCard
+                      key={restaurant.id}
+                      restaurant={restaurant}
+                    />
+                  ))}
+            </div>
 
-        <button
-          className='restaurant-listings__arrow'
-          aria-label='Next'
-          onClick={() =>
-            scrollToIndex(Math.min(activeIndex + 1, restaurants.length - 1))
-          }
-        >
-          <Icon icon='mdi:arrow-right' width={28} height={28} />
-        </button>
-      </div>
+            {count > 0 && (
+              <button
+                className='restaurant-listings__arrow'
+                aria-label='Next restaurant'
+                onClick={() =>
+                  scrollToIndex(Math.min(activeIndex + 1, count - 1))
+                }
+              >
+                <Icon icon='mdi:arrow-right' width={28} height={28} />
+              </button>
+            )}
+          </div>
 
-      <div className='restaurant-listings__pagination'>
-        {restaurants.map((r, i) => (
-          <span
-            key={r.name}
-            className={`dot ${i === activeIndex ? "dot--active" : ""}`}
-            onClick={() => scrollToIndex(i)}
-          />
-        ))}
-      </div>
+          {count > 0 && (
+            <div className='restaurant-listings__pagination'>
+              {restaurants.map((restaurant, i) => (
+                <button
+                  key={restaurant.id}
+                  className={`dot ${i === activeIndex ? "dot--active" : ""}`}
+                  aria-label={`Show ${restaurant.name}`}
+                  aria-current={i === activeIndex ? "true" : undefined}
+                  onClick={() => scrollToIndex(i)}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </section>
   );
 }
