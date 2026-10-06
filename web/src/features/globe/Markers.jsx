@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useThree } from "@react-three/fiber";
 import { REGION_PLACEMENTS } from "./regionPlacements";
 import { restaurantToGlobe } from "./globeMath";
 
@@ -38,6 +39,13 @@ export function Markers({ restaurants, regions, radius }) {
       ];
     });
   }, [restaurants, regions, radius]);
+
+  // The canvas only redraws on demand, so ask for a frame when markers change.
+  const invalidate = useThree((state) => state.invalidate);
+
+  useEffect(() => {
+    invalidate();
+  }, [placed, invalidate]);
 
   return (
     <>
