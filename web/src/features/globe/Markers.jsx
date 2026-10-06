@@ -3,9 +3,10 @@ import { useThree } from "@react-three/fiber";
 import { Billboard, useTexture } from "@react-three/drei";
 import { REGION_PLACEMENTS } from "./regionPlacements";
 import { restaurantToGlobe } from "./globeMath";
+import { surfaceRadius } from "./terrain";
 
 // Lifts markers off the surface so they don't sink into the planet.
-const MARKER_LIFT = 0.05;
+const MARKER_LIFT = 0.1;
 const MARKER_RADIUS = 0.11;
 const BORDER_WIDTH = 0.014;
 const PHOTO_RADIUS = MARKER_RADIUS - BORDER_WIDTH;
@@ -95,7 +96,7 @@ function RestaurantMarker({ restaurant, position }) {
   );
 }
 
-export function Markers({ restaurants, regions, radius }) {
+export function Markers({ restaurants, regions }) {
   const placed = useMemo(() => {
     if (regions.length === 0) return [];
 
@@ -115,19 +116,14 @@ export function Markers({ restaurants, regions, radius }) {
         return [];
       }
 
-      return [
-        {
-          restaurant,
-          position: restaurantToGlobe(
-            restaurant,
-            region,
-            placement,
-            radius + MARKER_LIFT,
-          ),
-        },
-      ];
+      const direction = restaurantToGlobe(restaurant, region, placement, 1);
+      const position = direction
+        .clone()
+        .multiplyScalar(surfaceRadius(direction) + MARKER_LIFT);
+
+      return [{ restaurant, position }];
     });
-  }, [restaurants, regions, radius]);
+  }, [restaurants, regions]);
 
   const invalidate = useThree((state) => state.invalidate);
 

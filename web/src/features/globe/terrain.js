@@ -1,6 +1,6 @@
 export const PLANET_RADIUS = 1.6;
 
-const HILL_HEIGHT = 0.018;
+const HILL_HEIGHT = 0.025;
 
 // Gentle rolling hills. Used by the planet mesh, and by trees and houses
 // so they sit on the hills instead of floating above or sinking into them.

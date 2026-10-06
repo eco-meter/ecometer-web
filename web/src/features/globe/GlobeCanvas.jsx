@@ -29,11 +29,7 @@ function World({ reducedMotion, restaurants, regions }) {
     <group ref={pitchRef}>
       <group ref={yawRef}>
         <Planet />
-        <Markers
-          restaurants={restaurants}
-          regions={regions}
-          radius={PLANET_RADIUS}
-        />
+        <Markers restaurants={restaurants} regions={regions} />
       </group>
     </group>
   );
@@ -53,8 +49,8 @@ export default function GlobeCanvas({
       gl={{ antialias: true, alpha: true }}
     >
       <directionalLight position={[5, 5.5, 5.5]} intensity={2.2} />
-      <hemisphereLight args={["#ffffff", "#335533", 1.1]} />
-      <ambientLight intensity={0.5} />
+      <hemisphereLight args={["#ffffff", "#5b8a5f", 1.3]} />
+      <ambientLight intensity={0.9} />
       <Halo />
       <World
         reducedMotion={reducedMotion}
