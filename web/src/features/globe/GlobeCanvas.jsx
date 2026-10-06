@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { useSpin } from "./useSpin";
+import { Markers } from "./Markers";
 
 const PLANET_RADIUS = 1.6;
 
@@ -12,7 +13,7 @@ function Planet() {
   );
 }
 
-function World({ reducedMotion }) {
+function World({ reducedMotion, restaurants, regions }) {
   const { pitchRef, yawRef } = useSpin({
     damping: reducedMotion ? 30 : 3.5,
   });
@@ -21,12 +22,21 @@ function World({ reducedMotion }) {
     <group ref={pitchRef}>
       <group ref={yawRef}>
         <Planet />
+        <Markers
+          restaurants={restaurants}
+          regions={regions}
+          radius={PLANET_RADIUS}
+        />
       </group>
     </group>
   );
 }
 
-export default function GlobeCanvas({ reducedMotion = false }) {
+export default function GlobeCanvas({
+  reducedMotion = false,
+  restaurants = [],
+  regions = [],
+}) {
   return (
     <Canvas
       frameloop='demand'
@@ -36,7 +46,11 @@ export default function GlobeCanvas({ reducedMotion = false }) {
     >
       <hemisphereLight args={["#efeee7", "#08572a", 1.2]} />
       <directionalLight position={[4, 5, 3]} intensity={2.2} />
-      <World reducedMotion={reducedMotion} />
+      <World
+        reducedMotion={reducedMotion}
+        restaurants={restaurants}
+        regions={regions}
+      />
     </Canvas>
   );
 }

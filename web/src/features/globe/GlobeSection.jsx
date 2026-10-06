@@ -1,6 +1,10 @@
 import { Component, Suspense, lazy, useState } from "react";
 import "./globe.css";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
+import { useRestaurants } from "../../hooks/useRestaurants.js";
+import { useRegions } from "../../hooks/useRegions.js";
+
+const EMPTY = [];
 
 const GlobeCanvas = lazy(() => import("./GlobeCanvas.jsx"));
 
@@ -31,6 +35,8 @@ class GlobeErrorBoundary extends Component {
 
 export default function GlobeSection({ fallbackSrc }) {
   const reducedMotion = usePrefersReducedMotion();
+  const { data: restaurants = EMPTY } = useRestaurants();
+  const { data: regions = EMPTY } = useRegions();
   const [webglSupported] = useState(hasWebGL);
 
   const fallback = (
@@ -42,7 +48,11 @@ export default function GlobeSection({ fallbackSrc }) {
       {webglSupported ? (
         <GlobeErrorBoundary fallback={fallback}>
           <Suspense fallback={fallback}>
-            <GlobeCanvas reducedMotion={reducedMotion} />
+            <GlobeCanvas
+              reducedMotion={reducedMotion}
+              restaurants={restaurants}
+              regions={regions}
+            />
           </Suspense>
         </GlobeErrorBoundary>
       ) : (
