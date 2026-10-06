@@ -41,7 +41,7 @@ export function useSpin({ maxPitch = 0.6, initialPitch = 0.25 } = {}) {
       s.pitch = clamp(s.pitch + (dy / width) * Math.PI, -maxPitch, maxPitch);
 
       s.lastX = event.clientX;
-      s.lasty = event.clientY;
+      s.lastY = event.clientY;
       invalidate();
     };
 
