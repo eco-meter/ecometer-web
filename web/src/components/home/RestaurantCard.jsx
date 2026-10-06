@@ -1,6 +1,8 @@
 import ScoreRing from "./ScoreRing.jsx";
 import "./RestaurantCard.css";
 
+const MAX_TOTAL = 300;
+
 function formatTag(cuisine, priceLevel) {
   return `${cuisine} • ${"$".repeat(priceLevel)}`;
 }
@@ -37,21 +39,41 @@ export default function RestaurantCard({ restaurant }) {
       )}
 
       <div className='restaurant-card__body'>
-        <h3 className='restaurant-card__name'>{name}</h3>
+        <div className='restaurant-card__header'>
+          <h3 className='restaurant-card__name'>{name}</h3>
+          <p className='restaurant-card__tag'>
+            {formatTag(cuisine, price_level)}
+          </p>
+        </div>
 
         <div className='restaurant-card__scores'>
-          <ScoreRing label='Food' percent={food_score} />
-          <ScoreRing label='Packaging' percent={packaging_score} />
-          <ScoreRing label='Suppliers' percent={supply_score} />
+          <ScoreRing label='Food' score={food_score} />
+          <ScoreRing label='Packaging' score={packaging_score} />
+          <ScoreRing label='Suppliers' score={supply_score} />
         </div>
 
-        <div className='restaurant-card__total-bar'>
-          <span>{total != null ? `${total} /300` : "Not yet scored"}</span>
-        </div>
-
-        <div className='restaurant-card__footer'>
-          <span>{formatTag(cuisine, price_level)}</span>
-          <span>Total Score</span>
+        <div className='restaurant-card__total'>
+          <div className='restaurant-card__total-row'>
+            <span>Total score</span>
+            {total != null ? (
+              <span className='restaurant-card__total-value'>
+                {total}{" "}
+                <span className='restaurant-card__total-max'>
+                  / {MAX_TOTAL}
+                </span>
+              </span>
+            ) : (
+              <span>Not yet scored</span>
+            )}
+          </div>
+          <div className='restaurant-card__total-track' aria-hidden='true'>
+            {total != null && (
+              <div
+                className='restaurant-card__total-fill'
+                style={{ "--fill": `${(total / MAX_TOTAL) * 100}%` }}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -58,7 +58,30 @@ export default function RestaurantListings() {
 
   return (
     <section className='restaurant-listings'>
-      <h2 className='restaurant-listings__heading'>Featured restaurants</h2>
+      <div className='restaurant-listings__header'>
+        <h2 className='restaurant-listings__heading'>Featured restaurants</h2>
+
+        {showControls && (
+          <div className='restaurant-listings__arrows'>
+            <button
+              className='restaurant-listings__arrow'
+              aria-label='Previous restaurants'
+              disabled={activeIndex === 0}
+              onClick={() => scrollToIndex(activeIndex - 1)}
+            >
+              <Icon icon='mdi:arrow-left' width={24} height={24} />
+            </button>
+            <button
+              className='restaurant-listings__arrow'
+              aria-label='Next restaurants'
+              disabled={activeIndex >= positions - 1}
+              onClick={() => scrollToIndex(activeIndex + 1)}
+            >
+              <Icon icon='mdi:arrow-right' width={24} height={24} />
+            </button>
+          </div>
+        )}
+      </div>
 
       {error ? (
         <p className='restaurant-listings__message'>
@@ -70,45 +93,18 @@ export default function RestaurantListings() {
         </p>
       ) : (
         <>
-          <div className='restaurant-listings__row-wrapper'>
-            {showControls && (
-              <button
-                className='restaurant-listings__arrow'
-                aria-label='Previous restaurants'
-                disabled={activeIndex === 0}
-                onClick={() => scrollToIndex(activeIndex - 1)}
-              >
-                <Icon icon='mdi:arrow-left' width={28} height={28} />
-              </button>
-            )}
-
-            <div className='restaurant-listings__row' ref={rowRef}>
-              {isLoading
-                ? [0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className='restaurant-card restaurant-card--skeleton'
-                      aria-hidden='true'
-                    />
-                  ))
-                : restaurants.map((restaurant) => (
-                    <RestaurantCard
-                      key={restaurant.id}
-                      restaurant={restaurant}
-                    />
-                  ))}
-            </div>
-
-            {showControls && (
-              <button
-                className='restaurant-listings__arrow'
-                aria-label='Next restaurants'
-                disabled={activeIndex >= positions - 1}
-                onClick={() => scrollToIndex(activeIndex + 1)}
-              >
-                <Icon icon='mdi:arrow-right' width={28} height={28} />
-              </button>
-            )}
+          <div className='restaurant-listings__row' ref={rowRef}>
+            {isLoading
+              ? [0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className='restaurant-card restaurant-card--skeleton'
+                    aria-hidden='true'
+                  />
+                ))
+              : restaurants.map((restaurant) => (
+                  <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+                ))}
           </div>
 
           {showControls && (
