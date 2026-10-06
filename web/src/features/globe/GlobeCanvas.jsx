@@ -1,4 +1,5 @@
 import { Canvas } from "@react-three/fiber";
+import { useSpin } from "./useSpin";
 
 const PLANET_RADIUS = 1.6;
 
@@ -8,6 +9,18 @@ function Planet() {
       <icosahedronGeometry args={[PLANET_RADIUS, 3]} />
       <meshStandardMaterial color='#3d9b5e' flatShading roughness={0.9} />
     </mesh>
+  );
+}
+
+function World() {
+  const { pitchRef, yawRef } = useSpin();
+
+  return (
+    <group ref={pitchRef}>
+      <group ref={yawRef}>
+        <Planet />
+      </group>
+    </group>
   );
 }
 
@@ -21,7 +34,7 @@ export default function GlobeCanvas() {
     >
       <hemisphereLight args={["#efeee7", "#08572a", 1.2]} />
       <directionalLight position={[4, 5, 3]} intensity={2.2} />
-      <Planet />
+      <World />
     </Canvas>
   );
 }

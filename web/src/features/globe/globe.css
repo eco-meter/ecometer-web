@@ -12,3 +12,13 @@
   height: 100%;
   object-fit: contain;
 }
+
+.globe-stage canvas {
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+}
+
+.globe-stage canvas:active {
+  cursor: grabbing;
+}
