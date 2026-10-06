@@ -4,37 +4,61 @@ import RestaurantCard from "./RestaurantCard.jsx";
 import { useRestaurants } from "../../hooks/useRestaurants.js";
 import "./RestaurantListings.css";
 
+function getStep(row) {
+  const card = row.firstElementChild;
+  if (!card) return 0;
+  const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+  return card.offsetWidth + gap;
+}
+
 export default function RestaurantListings() {
   const { data: restaurants = [], isLoading, error } = useRestaurants();
   const rowRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [positions, setPositions] = useState(1);
   const count = restaurants.length;
 
   useEffect(() => {
     const row = rowRef.current;
     if (!row || count === 0) return;
-    const onScroll = () => {
-      const cardWidth = row.firstElementChild?.offsetWidth;
-      const gap = 32;
-      const index = Math.round(row.scrollLeft / (cardWidth + gap));
-      setActiveIndex(Math.min(index, count - 1));
+
+    const measure = () => {
+      const step = getStep(row);
+      if (!step) return;
+      const visible = Math.max(1, Math.round((row.clientWidth + 1) / step));
+      const maxIndex = Math.max(0, count - visible);
+      setPositions(maxIndex + 1);
+      setActiveIndex(Math.min(Math.round(row.scrollLeft / step), maxIndex));
     };
-    row.addEventListener("scroll", onScroll, { passive: true });
-    return () => row.removeEventListener("scroll", onScroll);
+
+    // ResizeObserver fires once immediately, so this also handles the first measure.
+    const observer = new ResizeObserver(measure);
+    observer.observe(row);
+    row.addEventListener("scroll", measure, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      row.removeEventListener("scroll", measure);
+    };
   }, [count]);
 
   const scrollToIndex = (i) => {
-    const card = rowRef.current?.children[i];
-    card?.scrollIntoView({
-      behavior: "smooth",
-      inline: "center",
-      block: "nearest",
+    const row = rowRef.current;
+    if (!row) return;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    row.scrollTo({
+      left: i * getStep(row),
+      behavior: reduceMotion ? "auto" : "smooth",
     });
   };
 
+  const showControls = count > 0 && positions > 1;
+
   return (
     <section className='restaurant-listings'>
-      <h2 className='restaurant-listings__heading'>Restaurants near you</h2>
+      <h2 className='restaurant-listings__heading'>Featured restaurants</h2>
 
       {error ? (
         <p className='restaurant-listings__message'>
@@ -47,11 +71,12 @@ export default function RestaurantListings() {
       ) : (
         <>
           <div className='restaurant-listings__row-wrapper'>
-            {count > 0 && (
+            {showControls && (
               <button
                 className='restaurant-listings__arrow'
-                aria-label='Previous restaurant'
-                onClick={() => scrollToIndex(Math.max(activeIndex - 1, 0))}
+                aria-label='Previous restaurants'
+                disabled={activeIndex === 0}
+                onClick={() => scrollToIndex(activeIndex - 1)}
               >
                 <Icon icon='mdi:arrow-left' width={28} height={28} />
               </button>
@@ -74,26 +99,25 @@ export default function RestaurantListings() {
                   ))}
             </div>
 
-            {count > 0 && (
+            {showControls && (
               <button
                 className='restaurant-listings__arrow'
-                aria-label='Next restaurant'
-                onClick={() =>
-                  scrollToIndex(Math.min(activeIndex + 1, count - 1))
-                }
+                aria-label='Next restaurants'
+                disabled={activeIndex >= positions - 1}
+                onClick={() => scrollToIndex(activeIndex + 1)}
               >
                 <Icon icon='mdi:arrow-right' width={28} height={28} />
               </button>
             )}
           </div>
 
-          {count > 0 && (
+          {showControls && (
             <div className='restaurant-listings__pagination'>
-              {restaurants.map((restaurant, i) => (
+              {Array.from({ length: positions }, (_, i) => (
                 <button
-                  key={restaurant.id}
+                  key={i}
                   className={`dot ${i === activeIndex ? "dot--active" : ""}`}
-                  aria-label={`Show ${restaurant.name}`}
+                  aria-label={`Show restaurants from ${restaurants[i].name}`}
                   aria-current={i === activeIndex ? "true" : undefined}
                   onClick={() => scrollToIndex(i)}
                 />
