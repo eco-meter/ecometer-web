@@ -1,14 +1,21 @@
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 import { useSpin } from "./useSpin";
 import { Markers } from "./Markers";
+import { Planet } from "./Planet";
+import { PLANET_RADIUS } from "./terrain";
 
-const PLANET_RADIUS = 1.6;
-
-function Planet() {
+function Halo() {
   return (
     <mesh>
-      <icosahedronGeometry args={[PLANET_RADIUS, 3]} />
-      <meshStandardMaterial color='#3d9b5e' flatShading roughness={0.9} />
+      <sphereGeometry args={[PLANET_RADIUS * 1.18, 48, 48]} />
+      <meshBasicMaterial
+        color='#bfe3c9'
+        transparent
+        opacity={0.3}
+        side={THREE.BackSide}
+        depthWrite={false}
+      />
     </mesh>
   );
 }
@@ -39,13 +46,16 @@ export default function GlobeCanvas({
 }) {
   return (
     <Canvas
+      flat
       frameloop='demand'
       dpr={[1, 2]}
-      camera={{ position: [0, 0, 6], fov: 35 }}
+      camera={{ position: [0, 0, 7], fov: 35 }}
       gl={{ antialias: true, alpha: true }}
     >
-      <hemisphereLight args={["#efeee7", "#08572a", 1.2]} />
-      <directionalLight position={[4, 5, 3]} intensity={2.2} />
+      <directionalLight position={[5, 5.5, 5.5]} intensity={2.2} />
+      <hemisphereLight args={["#ffffff", "#335533", 1.1]} />
+      <ambientLight intensity={0.5} />
+      <Halo />
       <World
         reducedMotion={reducedMotion}
         restaurants={restaurants}
