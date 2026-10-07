@@ -1,8 +1,9 @@
-import { Component, Suspense, lazy, useState } from "react";
+import { Component, Suspense, lazy, useRef, useState } from "react";
 import "./globe.css";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 import { useRestaurants } from "../../hooks/useRestaurants.js";
 import { useRegions } from "../../hooks/useRegions.js";
+import { useInView } from "../../hooks/useInView.js";
 
 const EMPTY = [];
 
@@ -38,18 +39,21 @@ export default function GlobeSection({ fallbackSrc }) {
   const { data: restaurants = EMPTY } = useRestaurants();
   const { data: regions = EMPTY } = useRegions();
   const [webglSupported] = useState(hasWebGL);
+  const stageRef = useRef(null);
+  const inView = useInView(stageRef);
 
   const fallback = (
     <img src={fallbackSrc} alt='' className='globe-stage__fallback' />
   );
 
   return (
-    <div className='globe-stage'>
+    <div className='globe-stage' ref={stageRef}>
       {webglSupported ? (
         <GlobeErrorBoundary fallback={fallback}>
           <Suspense fallback={fallback}>
             <GlobeCanvas
               reducedMotion={reducedMotion}
+              animateClouds={inView && !reducedMotion}
               restaurants={restaurants}
               regions={regions}
             />

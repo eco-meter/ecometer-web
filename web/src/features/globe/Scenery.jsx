@@ -1,5 +1,5 @@
-import { useLayoutEffect, useMemo, useRef } from "react";
-import { useThree } from "@react-three/fiber";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { REGION_PLACEMENTS } from "./regionPlacements";
 import { globeToVector } from "./globeMath";
@@ -15,8 +15,11 @@ const TRUNK_COLOR = "#7a5a3a";
 const TREE_COLOR = "#43924f";
 
 const CLOUD_COUNT = 7;
-const CLOUD_ALTITUDE = 1.28; // multiple of the planet radius
-const CLOUD_SPACING = 30 * DEG_TO_RAD;
+const CLOUD_MIN_ALTITUDE = 1.3; // multiples of the planet radius
+const CLOUD_MAX_ALTITUDE = 1.5;
+const CLOUD_MIN_LAT = 28; // degrees: keeps clouds above and below the regions
+const CLOUD_MAX_LAT = 58;
+const DRIFT_SPEED = 0.04; // radians per second: one lap takes about 2.5 minutes
 
 // Seeded random numbers: the same "random" layout on every page load.
 function createRandom(seed) {
@@ -128,7 +131,10 @@ export function Trees() {
   );
 }
 
-export function Clouds() {
+export function Clouds({ animate = false }) {
+  const groupRef = useRef(null);
+  const invalidate = useThree((state) => state.invalidate);
+
   const puffGeometry = useMemo(() => new THREE.IcosahedronGeometry(1, 1), []);
   const puffMaterial = useMemo(
     () =>
@@ -142,18 +148,17 @@ export function Clouds() {
 
   const clouds = useMemo(() => {
     const random = createRandom(21);
-    const list = [];
-    let attempts = 0;
 
-    while (list.length < CLOUD_COUNT && attempts < 300) {
-      attempts++;
-      const direction = randomDirection(random, 55);
-      if (!isClearOfRegions(direction)) continue;
-      if (
-        list.some((cloud) => cloud.direction.angleTo(direction) < CLOUD_SPACING)
-      ) {
-        continue;
-      }
+    return Array.from({ length: CLOUD_COUNT }, (_, i) => {
+      const hemisphere = i % 2 === 0 ? 1 : -1;
+      const lat =
+        hemisphere *
+        (CLOUD_MIN_LAT + random() * (CLOUD_MAX_LAT - CLOUD_MIN_LAT));
+      const lng = (i / CLOUD_COUNT) * 360 + random() * 30;
+      const altitude =
+        PLANET_RADIUS *
+        (CLOUD_MIN_ALTITUDE +
+          random() * (CLOUD_MAX_ALTITUDE - CLOUD_MIN_ALTITUDE));
 
       const puffCount = 2 + Math.floor(random() * 3);
       const puffs = Array.from({ length: puffCount }, (_, j) => ({
@@ -165,23 +170,25 @@ export function Clouds() {
         size: 0.08 + random() * 0.07,
       }));
 
-      list.push({
-        direction,
-        position: direction
-          .clone()
-          .multiplyScalar(PLANET_RADIUS * CLOUD_ALTITUDE),
-        quaternion: new THREE.Quaternion().setFromUnitVectors(UP, direction),
-        puffs,
-      });
-    }
-
-    return list;
+      return { position: globeToVector(lat, lng, altitude), puffs };
+    });
   }, []);
 
+  // The canvas is idle until asked, so give it a nudge when drifting starts.
+  useEffect(() => {
+    if (animate) invalidate();
+  }, [animate, invalidate]);
+
+  useFrame((_, delta) => {
+    if (!animate || !groupRef.current) return;
+    groupRef.current.rotation.y += DRIFT_SPEED * Math.min(delta, 0.05);
+    invalidate();
+  });
+
   return (
-    <>
+    <group ref={groupRef}>
       {clouds.map((cloud, i) => (
-        <group key={i} position={cloud.position} quaternion={cloud.quaternion}>
+        <group key={i} position={cloud.position}>
           {cloud.puffs.map((puff, j) => (
             <mesh
               key={j}
@@ -193,6 +200,6 @@ export function Clouds() {
           ))}
         </group>
       ))}
-    </>
+    </group>
   );
 }

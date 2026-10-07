@@ -31,7 +31,6 @@ function World({ reducedMotion, restaurants, regions }) {
       <group ref={yawRef}>
         <Planet />
         <Trees />
-        <Clouds />
         <Markers restaurants={restaurants} regions={regions} />
       </group>
     </group>
@@ -40,6 +39,7 @@ function World({ reducedMotion, restaurants, regions }) {
 
 export default function GlobeCanvas({
   reducedMotion = false,
+  animateClouds = false,
   restaurants = [],
   regions = [],
 }) {
@@ -55,6 +55,7 @@ export default function GlobeCanvas({
       <hemisphereLight args={["#ffffff", "#5b8a5f", 1.3]} />
       <ambientLight intensity={0.9} />
       <Halo />
+      <Clouds animate={animateClouds} />
       <World
         reducedMotion={reducedMotion}
         restaurants={restaurants}
