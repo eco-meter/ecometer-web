@@ -4,6 +4,7 @@ import { useSpin } from "./useSpin";
 import { Markers } from "./Markers";
 import { Planet } from "./Planet";
 import { PLANET_RADIUS } from "./terrain";
+import { Trees, Clouds } from "./Scenery";
 
 function Halo() {
   return (
@@ -29,6 +30,8 @@ function World({ reducedMotion, restaurants, regions }) {
     <group ref={pitchRef}>
       <group ref={yawRef}>
         <Planet />
+        <Trees />
+        <Clouds />
         <Markers restaurants={restaurants} regions={regions} />
       </group>
     </group>
