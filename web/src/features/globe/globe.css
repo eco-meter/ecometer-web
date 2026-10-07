@@ -1,3 +1,10 @@
+.globe-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
 .globe-stage {
   position: relative;
   width: 100%;
@@ -17,8 +24,65 @@
   touch-action: pan-y;
   cursor: grab;
   user-select: none;
+  -webkit-user-select: none;
+  /* Fades the top and bottom edges so a zoomed-in planet dissolves into the band */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
 }
 
 .globe-stage canvas:active {
   cursor: grabbing;
+}
+
+/* Region buttons */
+.region-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-inline: var(--content-margin);
+}
+
+.region-picker__option {
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--content-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.region-picker__option:hover {
+  border-color: var(--color-brand-green);
+}
+
+.region-picker__option[aria-pressed="true"] {
+  background: var(--color-brand-green);
+  border-color: var(--color-brand-green);
+  color: var(--color-white);
+}
+
+.region-picker__option:focus-visible {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
 }

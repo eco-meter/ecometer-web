@@ -1,13 +1,16 @@
-import { Component, Suspense, lazy, useRef, useState } from "react";
-import "./globe.css";
-import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
+import { Component, Suspense, lazy, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useRestaurants } from "../../hooks/useRestaurants.js";
 import { useRegions } from "../../hooks/useRegions.js";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 import { useInView } from "../../hooks/useInView.js";
-
-const EMPTY = [];
+import { REGION_PLACEMENTS } from "./regionPlacements";
+import { RegionPicker } from "./RegionPicker";
+import "./globe.css";
 
 const GlobeCanvas = lazy(() => import("./GlobeCanvas.jsx"));
+
+const EMPTY = [];
 
 function hasWebGL() {
   try {
@@ -16,6 +19,14 @@ function hasWebGL() {
   } catch {
     return false;
   }
+}
+
+// Returns a copy of the URL params with the region set or removed.
+function withRegion(params, slug) {
+  const next = new URLSearchParams(params);
+  if (slug) next.set("region", slug);
+  else next.delete("region");
+  return next;
 }
 
 class GlobeErrorBoundary extends Component {
@@ -38,30 +49,72 @@ export default function GlobeSection({ fallbackSrc }) {
   const reducedMotion = usePrefersReducedMotion();
   const { data: restaurants = EMPTY } = useRestaurants();
   const { data: regions = EMPTY } = useRegions();
-  const [webglSupported] = useState(hasWebGL);
   const stageRef = useRef(null);
   const inView = useInView(stageRef);
+  const [webglSupported] = useState(hasWebGL);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Ignore ?region= values that don't exist on the globe
+  const requestedSlug = searchParams.get("region");
+  const activeSlug =
+    requestedSlug && REGION_PLACEMENTS[requestedSlug] ? requestedSlug : null;
+  const focus = activeSlug ? REGION_PLACEMENTS[activeSlug] : null;
+
+  const pickableRegions = regions.filter(
+    (region) => REGION_PLACEMENTS[region.slug],
+  );
+
+  function selectRegion(slug) {
+    setSearchParams((params) => withRegion(params, slug), {
+      preventScrollReset: true,
+    });
+  }
+
+  // Escape zooms back out.
+  useEffect(() => {
+    if (!activeSlug) return;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSearchParams((params) => withRegion(params, null), {
+          preventScrollReset: true,
+        });
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activeSlug, setSearchParams]);
 
   const fallback = (
     <img src={fallbackSrc} alt='' className='globe-stage__fallback' />
   );
 
   return (
-    <div className='globe-stage' ref={stageRef}>
-      {webglSupported ? (
-        <GlobeErrorBoundary fallback={fallback}>
-          <Suspense fallback={fallback}>
-            <GlobeCanvas
-              reducedMotion={reducedMotion}
-              animateClouds={inView && !reducedMotion}
-              restaurants={restaurants}
-              regions={regions}
-            />
-          </Suspense>
-        </GlobeErrorBoundary>
-      ) : (
-        fallback
-      )}
+    <div className='globe-section'>
+      <div className='globe-stage' ref={stageRef}>
+        {webglSupported ? (
+          <GlobeErrorBoundary fallback={fallback}>
+            <Suspense fallback={fallback}>
+              <GlobeCanvas
+                reducedMotion={reducedMotion}
+                animateClouds={inView && !reducedMotion}
+                focus={focus}
+                restaurants={restaurants}
+                regions={regions}
+              />
+            </Suspense>
+          </GlobeErrorBoundary>
+        ) : (
+          fallback
+        )}
+      </div>
+
+      <RegionPicker
+        regions={pickableRegions}
+        activeSlug={activeSlug}
+        onSelect={selectRegion}
+      />
     </div>
   );
 }

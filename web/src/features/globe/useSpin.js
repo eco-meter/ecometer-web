@@ -4,15 +4,24 @@ import { useFrame, useThree } from "@react-three/fiber";
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 const lerp = (a, b, t) => a + (b - a) * t;
 
-//  If the pointer sat still this long before release, it's a "place", not a "flick".
+// Shortest signed angle, between -π and π.
+const wrapAngle = (angle) => Math.atan2(Math.sin(angle), Math.cos(angle));
+
+const DEG_TO_RAD = Math.PI / 180;
 const FLICK_WINDOW_MS = 80;
+const FLY_SPEED = 4; // higher arrives faster
 
 export function useSpin({
   maxPitch = 0.6,
   initialPitch = 0.25,
   damping = 3.5,
+  focus = null,
+  baseDistance = 7,
+  focusDistance = 4.2,
+  planetRadius = 1.6,
+  instant = false,
 } = {}) {
-  const { gl, invalidate } = useThree();
+  const { gl, invalidate, get } = useThree();
   const pitchRef = useRef(null);
   const yawRef = useRef(null);
 
@@ -26,7 +35,32 @@ export function useSpin({
     lastX: 0,
     lastY: 0,
     lastTime: 0,
+    flying: false,
+    targetYaw: 0,
+    targetPitch: 0,
   });
+
+  const focusLat = focus?.lat ?? null;
+  const focusLng = focus?.lng ?? null;
+
+  // Fly to the focused region whenever it changes.
+  useEffect(() => {
+    const s = spin.current;
+
+    if (focusLat === null) {
+      s.flying = false;
+      invalidate();
+      return;
+    }
+
+    const yawTarget = -focusLng * DEG_TO_RAD;
+    s.targetYaw = s.yaw + wrapAngle(yawTarget - s.yaw);
+    s.targetPitch = clamp(focusLat * DEG_TO_RAD, -maxPitch, maxPitch);
+    s.velYaw = 0;
+    s.velPitch = 0;
+    s.flying = true;
+    invalidate();
+  }, [focusLat, focusLng, maxPitch, invalidate]);
 
   useEffect(() => {
     const canvas = gl.domElement;
@@ -35,6 +69,7 @@ export function useSpin({
     const onDown = (event) => {
       if (event.button !== 0) return;
       s.dragging = true;
+      s.flying = false;
       s.pointerId = event.pointerId;
       s.lastX = event.clientX;
       s.lastY = event.clientY;
@@ -50,13 +85,20 @@ export function useSpin({
       const now = performance.now();
       const seconds = Math.max((now - s.lastTime) / 1000, 1 / 240);
       const width = canvas.clientWidth || 1;
-      const deltaYaw = ((event.clientX - s.lastX) / width) * Math.PI;
-      const deltaPitch = ((event.clientY - s.lastY) / width) * Math.PI;
+
+      // Closer camera = slower spin, so dragging feels the same zoomed in.
+      const distance = get().camera.position.z;
+      const zoomScale =
+        (distance - planetRadius) / (baseDistance - planetRadius);
+
+      const deltaYaw =
+        ((event.clientX - s.lastX) / width) * Math.PI * zoomScale;
+      const deltaPitch =
+        ((event.clientY - s.lastY) / width) * Math.PI * zoomScale;
 
       s.yaw += deltaYaw;
       s.pitch = clamp(s.pitch + deltaPitch, -maxPitch, maxPitch);
 
-      // Speed in radians per second, smoothed so one jittery event can't define the flick.
       s.velYaw = lerp(s.velYaw, deltaYaw / seconds, 0.5);
       s.velPitch = lerp(s.velPitch, deltaPitch / seconds, 0.5);
 
@@ -94,14 +136,26 @@ export function useSpin({
       canvas.removeEventListener("pointerup", onUp);
       canvas.removeEventListener("pointercancel", onUp);
     };
-  }, [gl, invalidate, maxPitch]);
+  }, [gl, invalidate, get, maxPitch, baseDistance, planetRadius]);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const s = spin.current;
-    // Cap the frame time so returning to background tab doesn't fling globe
     const dt = Math.min(delta, 0.05);
+    const ease = instant ? 1 : 1 - Math.exp(-FLY_SPEED * dt);
 
-    if (!s.dragging) {
+    if (s.flying && !s.dragging) {
+      s.yaw += (s.targetYaw - s.yaw) * ease;
+      s.pitch += (s.targetPitch - s.pitch) * ease;
+
+      const arrived =
+        Math.abs(s.targetYaw - s.yaw) < 0.0005 &&
+        Math.abs(s.targetPitch - s.pitch) < 0.0005;
+      if (arrived) {
+        s.yaw = s.targetYaw;
+        s.pitch = s.targetPitch;
+        s.flying = false;
+      }
+    } else if (!s.dragging) {
       s.yaw += s.velYaw * dt;
       s.pitch = clamp(s.pitch + s.velPitch * dt, -maxPitch, maxPitch);
 
@@ -114,10 +168,27 @@ export function useSpin({
       if (Math.abs(s.velPitch) < 0.001) s.velPitch = 0;
     }
 
+    // Ease the camera towards the zoom level for the current view.
+    const camera = state.camera;
+    const targetDistance = focusLat === null ? baseDistance : focusDistance;
+    const gap = targetDistance - camera.position.z;
+    const zooming = Math.abs(gap) > 0.001;
+    camera.position.z = zooming
+      ? camera.position.z + gap * ease
+      : targetDistance;
+
     if (yawRef.current) yawRef.current.rotation.y = s.yaw;
     if (pitchRef.current) pitchRef.current.rotation.x = s.pitch;
 
-    if (s.dragging || s.velYaw !== 0 || s.velPitch !== 0) invalidate();
+    if (
+      s.dragging ||
+      s.flying ||
+      zooming ||
+      s.velYaw !== 0 ||
+      s.velPitch !== 0
+    ) {
+      invalidate();
+    }
   });
 
   return { pitchRef, yawRef };

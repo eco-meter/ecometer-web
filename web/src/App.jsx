@@ -6,11 +6,11 @@ import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 
 function ScrollToHash() {
-  const location = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (location.hash) {
-      const el = document.getElementById(location.hash.slice(1));
+    if (hash) {
+      const el = document.getElementById(hash.slice(1));
       if (el) {
         requestAnimationFrame(() =>
           el.scrollIntoView({ behavior: "smooth", block: "start" }),
@@ -19,7 +19,7 @@ function ScrollToHash() {
       }
     }
     window.scrollTo({ top: 0 });
-  }, [location]);
+  }, [pathname, hash]);
 
   return null;
 }

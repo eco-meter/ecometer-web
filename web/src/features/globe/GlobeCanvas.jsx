@@ -6,6 +6,9 @@ import { Planet } from "./Planet";
 import { PLANET_RADIUS } from "./terrain";
 import { Trees, Clouds } from "./Scenery";
 
+const CAMERA_DISTANCE = 7;
+const FOCUS_DISTANCE = 5;
+
 function Halo() {
   return (
     <mesh>
@@ -21,9 +24,14 @@ function Halo() {
   );
 }
 
-function World({ reducedMotion, restaurants, regions }) {
+function World({ reducedMotion, focus, restaurants, regions }) {
   const { pitchRef, yawRef } = useSpin({
     damping: reducedMotion ? 30 : 3.5,
+    instant: reducedMotion,
+    focus,
+    baseDistance: CAMERA_DISTANCE,
+    focusDistance: FOCUS_DISTANCE,
+    planetRadius: PLANET_RADIUS,
   });
 
   return (
@@ -40,6 +48,7 @@ function World({ reducedMotion, restaurants, regions }) {
 export default function GlobeCanvas({
   reducedMotion = false,
   animateClouds = false,
+  focus = null,
   restaurants = [],
   regions = [],
 }) {
@@ -48,7 +57,7 @@ export default function GlobeCanvas({
       flat
       frameloop='demand'
       dpr={[1, 2]}
-      camera={{ position: [0, 0, 7], fov: 35 }}
+      camera={{ position: [0, 0, CAMERA_DISTANCE], fov: 35 }}
       gl={{ antialias: true, alpha: true }}
     >
       <directionalLight position={[5, 5.5, 5.5]} intensity={2.2} />
@@ -58,6 +67,7 @@ export default function GlobeCanvas({
       <Clouds animate={animateClouds} />
       <World
         reducedMotion={reducedMotion}
+        focus={focus}
         restaurants={restaurants}
         regions={regions}
       />
