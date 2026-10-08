@@ -86,3 +86,47 @@
   outline: 2px solid var(--color-brand-green);
   outline-offset: 2px;
 }
+
+/* Pointer cursor while a house is hovered (it's card only exists then) */
+.globe-stage:has(.house-card) canvas {
+  cursor: pointer;
+}
+
+/* Hover card above a house */
+.house-card {
+  width: 180px;
+  transform: translate(-50%, calc(-100% - 8px));
+  background: var(--color-white);
+  border: 1px solid var(--content-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.house-card__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.house-card__body {
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.house-card__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.house-card__tag {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}

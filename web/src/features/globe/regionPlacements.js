@@ -7,7 +7,7 @@
 // won't appear on the globe (they still show in listings).
 
 export const REGION_PLACEMENTS = {
-  downtown: { lat: 12, lng: -18, spread: 8 },
+  downtown: { lat: 12, lng: -18, spread: 16 },
   burnaby: { lat: 14, lng: 8, spread: 8 },
   richmond: { lat: -14, lng: -14, spread: 8 },
   surrey: { lat: -6, lng: 22, spread: 10 },

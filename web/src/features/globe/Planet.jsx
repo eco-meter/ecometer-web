@@ -22,7 +22,10 @@ export function Planet() {
   }, []);
 
   return (
-    <mesh geometry={geometry}>
+    <mesh
+      geometry={geometry}
+      onPointerOver={(event) => event.stopPropagation()}
+    >
       <meshStandardMaterial color={LAND_COLOR} flatShading roughness={0.95} />
     </mesh>
   );
