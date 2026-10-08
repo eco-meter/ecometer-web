@@ -1,8 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import RestaurantCard from "./RestaurantCard.jsx";
 import { useRestaurants } from "../../hooks/useRestaurants.js";
+import { useRegions } from "../../hooks/useRegions.js";
 import "./RestaurantListings.css";
+
+const EMPTY = [];
 
 function getStep(row) {
   const card = row.firstElementChild;
@@ -12,11 +16,31 @@ function getStep(row) {
 }
 
 export default function RestaurantListings() {
-  const { data: restaurants = [], isLoading, error } = useRestaurants();
+  const { data: allRestaurants = EMPTY, isLoading, error } = useRestaurants();
+  const { data: regions = EMPTY } = useRegions();
+  const [searchParams] = useSearchParams();
   const rowRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [positions, setPositions] = useState(1);
+
+  // The globe's region picker sets ?region= in the URL. Read it here too.
+  const regionSlug = searchParams.get("region");
+  const activeRegion =
+    regions.find((region) => region.slug === regionSlug) ?? null;
+
+  const restaurants = useMemo(() => {
+    if (!activeRegion) return allRestaurants;
+    return allRestaurants.filter(
+      (restaurant) => restaurant.region?.slug === activeRegion.slug,
+    );
+  }, [allRestaurants, activeRegion]);
+
   const count = restaurants.length;
+
+  // Start the carousel from the beginning whenever the region changes.
+  useEffect(() => {
+    rowRef.current?.scrollTo({ left: 0 });
+  }, [regionSlug]);
 
   useEffect(() => {
     const row = rowRef.current;
@@ -55,11 +79,19 @@ export default function RestaurantListings() {
   };
 
   const showControls = count > 0 && positions > 1;
+  const heading = activeRegion
+    ? `Restaurants in ${activeRegion.name}`
+    : "Featured restaurants";
+  const emptyMessage = activeRegion
+    ? `No restaurants listed in ${activeRegion.name} yet. Check back soon.`
+    : "No restaurants listed yet. Check back soon.";
 
   return (
     <section className='restaurant-listings'>
       <div className='restaurant-listings__header'>
-        <h2 className='restaurant-listings__heading'>Featured restaurants</h2>
+        <h2 className='restaurant-listings__heading' aria-live='polite'>
+          {heading}
+        </h2>
 
         {showControls && (
           <div className='restaurant-listings__arrows'>
@@ -88,9 +120,7 @@ export default function RestaurantListings() {
           Restaurants couldn’t load. Refresh the page to try again.
         </p>
       ) : !isLoading && count === 0 ? (
-        <p className='restaurant-listings__message'>
-          No restaurants listed yet. Check back soon.
-        </p>
+        <p className='restaurant-listings__message'>{emptyMessage}</p>
       ) : (
         <>
           <div className='restaurant-listings__row' ref={rowRef}>
