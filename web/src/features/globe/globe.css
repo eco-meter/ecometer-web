@@ -58,7 +58,7 @@
 .region-picker__option {
   min-height: 40px;
   padding: 0 var(--space-4);
-  border: 1px solid var(--content-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   background: var(--color-white);
   color: var(--color-text);
@@ -87,46 +87,134 @@
   outline-offset: 2px;
 }
 
-/* Pointer cursor while a house is hovered (it's card only exists then) */
+/* Pointer cursor while a house is hovered (its card only exists then) */
 .globe-stage:has(.house-card) canvas {
   cursor: pointer;
 }
 
 /* Hover card above a house */
 .house-card {
-  width: 180px;
-  transform: translate(-50%, calc(-100% - 8px));
+  position: relative;
+  width: 210px;
+  transform: translate(-50%, calc(-100% - 14px));
   background: var(--color-white);
-  border: 1px solid var(--content-border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+/* Pointer aiming down at the house */
+.house-card::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-white);
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .house-card__photo {
   display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
+  width: calc(100% - 12px);
+  margin: 6px 6px 0;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
+  border-radius: 5px;
 }
 
 .house-card__body {
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--space-2);
 }
 
 .house-card__name {
   margin: 0;
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.2;
   color: var(--color-text);
 }
 
+.house-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
 .house-card__tag {
-  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 13px;
   color: var(--color-text-secondary);
+}
+
+.house-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.house-card__verified {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0b7d3c;
+  background: #e3f5ea;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+.house-card__score {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.house-card__score-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.house-card__score-value {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.house-card__score-max {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.house-card__track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.house-card__fill {
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    #7dd9a0,
+    var(--color-brand-green),
+    #08572a
+  );
+  clip-path: inset(0 calc(100% - var(--fill)) 0 0 round var(--radius-pill));
 }

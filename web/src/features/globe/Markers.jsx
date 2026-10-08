@@ -12,18 +12,64 @@ const DOOR_COLOR = "#5a4030";
 // Turns each house slightly so you see its front, side and roof.
 const HOUSE_TILT = 0.25;
 const HOUSE_TURN = -0.5;
+const MAX_TOTAL = 300;
+
+function getTotal(restaurant) {
+  const scores = [
+    restaurant.food_score,
+    restaurant.packaging_score,
+    restaurant.supply_score,
+  ];
+  if (scores.some((score) => score == null)) return null;
+  return scores.reduce((sum, score) => sum + score, 0);
+}
 
 function HouseCard({ restaurant }) {
+  const total = getTotal(restaurant);
+
   return (
     <div className='house-card'>
       {restaurant.photoUrl && (
         <img src={restaurant.photoUrl} alt='' className='house-card__photo' />
       )}
+
       <div className='house-card__body'>
         <p className='house-card__name'>{restaurant.name}</p>
-        <p className='house-card__tag'>
-          {restaurant.cuisine} • {"$".repeat(restaurant.price_level)}
-        </p>
+
+        <div className='house-card__meta'>
+          <span className='house-card__tag'>
+            <span
+              className='house-card__dot'
+              style={{ background: getCuisineColor(restaurant.cuisine) }}
+            />
+            {restaurant.cuisine} · {"$".repeat(restaurant.price_level)}
+          </span>
+          {restaurant.verified && (
+            <span className='house-card__verified'>✓ Verified</span>
+          )}
+        </div>
+
+        <div className='house-card__score'>
+          <div className='house-card__score-row'>
+            <span>Total score</span>
+            {total != null ? (
+              <span className='house-card__score-value'>
+                {total}{" "}
+                <span className='house-card__score-max'>/ {MAX_TOTAL}</span>
+              </span>
+            ) : (
+              <span>Not yet scored</span>
+            )}
+          </div>
+          <div className='house-card__track'>
+            {total != null && (
+              <div
+                className='house-card__fill'
+                style={{ "--fill": `${(total / MAX_TOTAL) * 100}%` }}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
