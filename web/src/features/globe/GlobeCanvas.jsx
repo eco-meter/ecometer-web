@@ -4,7 +4,7 @@ import { useSpin } from "./useSpin";
 import { Markers } from "./Markers";
 import { Planet } from "./Planet";
 import { PLANET_RADIUS } from "./terrain";
-import { Trees, Clouds } from "./Scenery";
+import { Trees, Clouds, Ponds } from "./Scenery";
 
 const CAMERA_DISTANCE = 7;
 const FOCUS_DISTANCE = 5;
@@ -38,6 +38,7 @@ function World({ reducedMotion, focus, restaurants, regions }) {
     <group ref={pitchRef}>
       <group ref={yawRef}>
         <Planet />
+        <Ponds />
         <Trees />
         <Markers restaurants={restaurants} regions={regions} />
       </group>
