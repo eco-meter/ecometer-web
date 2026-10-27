@@ -30,3 +30,26 @@ export function useRestaurants() {
     queryFn: fetchRestaurants,
   });
 }
+
+async function fetchRestaurant(slug) {
+  const { data, error } = await supabase
+    .from("restaurants")
+    .select(
+      "id, slug, name, cuisine, price_level, photo_path, food_score, packaging_score, supply_score, verified, region:regions(slug, name)",
+    )
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) return null;
+
+  return { ...data, photoUrl: getPhotoUrl(data.photo_path) };
+}
+
+export function useRestaurant(slug) {
+  return useQuery({
+    queryKey: ["restaurant", slug],
+    queryFn: () => fetchRestaurant(slug),
+    enabled: Boolean(slug),
+  });
+}

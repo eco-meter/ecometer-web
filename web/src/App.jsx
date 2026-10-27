@@ -4,6 +4,7 @@ import Nav from "./components/layout/Nav.jsx";
 import Footer from "./components/layout/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
+import Restaurant from "./pages/Restaurant.jsx";
 
 function ScrollToHash() {
   const { pathname, hash } = useLocation();
@@ -33,6 +34,7 @@ export default function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<About />} />
+          <Route path='/restaurant/:slug' element={<Restaurant />} />
         </Routes>
       </main>
       <Footer />
