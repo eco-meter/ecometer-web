@@ -1,0 +1,39 @@
+.restaurant-page {
+  max-width: var(--max-content-width);
+  margin-inline: auto;
+  padding: var(--space-12) var(--content-margin);
+}
+
+.restaurant-page__status {
+  padding: var(--space-12);
+}
+
+.restaurant-page__name {
+  font-size: 40px;
+  color: var(--color-green-dark);
+  margin-bottom: var(--space-8);
+}
+
+.restaurant-page__scores {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 507px);
+  justify-content: center;
+  align-items: start;
+  gap: var(--space-12);
+}
+
+.metric-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+@media (max-width: 860px) {
+  .restaurant-page__scores {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-page__scores .eco-gauge {
+    width: min(100%, 220px);
+  }
+}
