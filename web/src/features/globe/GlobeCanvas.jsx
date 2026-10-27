@@ -61,9 +61,9 @@ export default function GlobeCanvas({
       camera={{ position: [0, 0, CAMERA_DISTANCE], fov: 35 }}
       gl={{ antialias: true, alpha: true }}
     >
-      <directionalLight position={[5, 5.5, 5.5]} intensity={2.2} />
-      <hemisphereLight args={["#ffffff", "#5b8a5f", 1.3]} />
-      <ambientLight intensity={0.9} />
+      <directionalLight position={[5, 5.5, 5.5]} intensity={2.6} />
+      <hemisphereLight args={["#ffffff", "#5b8a5f", 0.55]} />
+      <ambientLight intensity={0.35} />
       <Halo />
       <Clouds animate={animateClouds} />
       <World
