@@ -49,42 +49,67 @@
 /* Region buttons */
 .region-picker {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-2);
   padding-inline: var(--content-margin);
 }
 
-.region-picker__option {
-  min-height: 40px;
-  padding: 0 var(--space-4);
+/* Read by screen readers, hidden visually */
+.region-picker__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.region-picker__field {
+  position: relative;
+  width: min(100%, 280px);
+}
+
+.region-picker__select {
+  appearance: none;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 44px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
   background: var(--color-white);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    color 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
-.region-picker__option:hover {
+.region-picker__select:hover {
   border-color: var(--color-brand-green);
 }
 
-.region-picker__option[aria-pressed="true"] {
-  background: var(--color-brand-green);
-  border-color: var(--color-brand-green);
-  color: var(--color-white);
-}
-
-.region-picker__option:focus-visible {
+.region-picker__select:focus-visible {
   outline: 2px solid var(--color-brand-green);
   outline-offset: 2px;
+}
+
+.region-picker__pin,
+.region-picker__chevron {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.region-picker__pin {
+  left: 16px;
+  color: var(--color-brand-green);
+}
+
+.region-picker__chevron {
+  right: 16px;
 }
 
 /* Pointer cursor while a house is hovered (its card only exists then) */
