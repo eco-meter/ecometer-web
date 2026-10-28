@@ -1,27 +1,27 @@
 // The three score categories shown on every restaurant page.
 // `field` is the matching column in the Supabase restaurants table.
-// `description` is the "How this score works" text. Ewan is writing the
-// final versions; the Food and Packaging text below are placeholders.
+// `description` is the "How this score works" text, supplied by Ewan.
+
 export const SCORE_CATEGORIES = [
   {
     key: "food",
     field: "food_score",
     title: "Food Waste",
     description:
-      "This score compares how much food your kitchen throws away against your industry benchmark, based on prep waste, plate waste and how surplus food is donated or composted.",
+      "Measures how effectively a restaurant prevents and diverts food from landfill. The score is based on factors such as ingredient utilization, preparation practices, portion management, surplus recovery, and food donation, using information collected through EcoMeter assessments and tracking.",
   },
   {
     key: "packaging",
     field: "packaging_score",
     title: "Packaging Waste",
     description:
-      "This score compares your packaging waste against your industry benchmark, based on single-use items, recyclable and compostable materials, and reusable container programs.",
+      "Measures how responsibly a restaurant manages the packaging associated with its food and beverage operations. We assess the types and quantities of packaging used, including reusable, recyclable, compostable, and landfill-bound materials, to determine how effectively packaging impacts are being reduced.",
   },
   {
     key: "supply",
     field: "supply_score",
     title: "Supplier Waste",
     description:
-      "This score compares your supplier waste performance against your industry benchmark, based on weight of waste, diversion rate and waste reduction initiatives.",
+      "Measures how sustainably a restaurant sources its food and packaging. The score considers where products come from and the proportion sourced locally within BC, elsewhere in Canada, or internationally, along with other relevant supplier sustainability practices.",
   },
 ];
