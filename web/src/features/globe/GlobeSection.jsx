@@ -92,6 +92,11 @@ export default function GlobeSection({ fallbackSrc }) {
 
   return (
     <div className='globe-section'>
+      <RegionPicker
+        regions={pickableRegions}
+        activeSlug={activeSlug}
+        onSelect={selectRegion}
+      />
       <div className='globe-stage' ref={stageRef}>
         {webglSupported ? (
           <GlobeErrorBoundary fallback={fallback}>
@@ -109,12 +114,6 @@ export default function GlobeSection({ fallbackSrc }) {
           fallback
         )}
       </div>
-
-      <RegionPicker
-        regions={pickableRegions}
-        activeSlug={activeSlug}
-        onSelect={selectRegion}
-      />
     </div>
   );
 }
