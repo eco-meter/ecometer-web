@@ -3,9 +3,11 @@ import * as THREE from "three";
 import { PLANET_RADIUS, surfaceRadius } from "./terrain";
 import { smoothNoise } from "./noise";
 import { isInTown } from "./regionZones";
+import { outlineMaterial, toonGradient } from "./toon";
 
-const MEADOW_COLORS = ["#5fb466", "#6cc070", "#79c977", "#68bb6a"];
-const TOWN_COLOR = "#a7db8c";
+const MEADOW_COLORS = ["#86cd72", "#93d67c", "#a0dd88", "#8cd177"];
+const TOWN_COLOR = "#c6e9a6";
+const OUTLINE_SCALE = 1.012; // how far the planet outline sits past the edge
 const PATCH_SCALE = 2.4;
 
 export function Planet() {
@@ -49,11 +51,19 @@ export function Planet() {
   }, []);
 
   return (
-    <mesh
-      geometry={geometry}
-      onPointerOver={(event) => event.stopPropagation()}
-    >
-      <meshStandardMaterial vertexColors flatShading roughness={0.95} />
-    </mesh>
+    <>
+      <mesh
+        geometry={geometry}
+        onPointerOver={(event) => event.stopPropagation()}
+      >
+        <meshToonMaterial vertexColors gradientMap={toonGradient} />
+      </mesh>
+      <mesh
+        geometry={geometry}
+        material={outlineMaterial}
+        scale={OUTLINE_SCALE}
+        raycast={() => null}
+      />
+    </>
   );
 }

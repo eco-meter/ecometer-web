@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { globeToVector } from "./globeMath";
 import { PLANET_RADIUS, surfaceRadius } from "./terrain";
 import { isClearOfRegions } from "./regionZones";
+import { makeOutlineGeometry, outlineMaterial, toonGradient } from "./toon";
 
 const UP = new THREE.Vector3(0, 1, 0);
 const DEG_TO_RAD = Math.PI / 180;
@@ -15,6 +16,8 @@ const CROWN_HEIGHT = 0.09;
 const TRUNK_COLOR = "#7a5a3a";
 const PINE_COLOR = "#43924f";
 const LEAFY_COLOR = "#8fd27a";
+const TREE_OUTLINE = 0.006; // outline thickness on trees
+const CLOUD_OUTLINE_SCALE = 1.12;
 
 const POND_COUNT = 3;
 const POND_SPACING = 25 * DEG_TO_RAD;
@@ -118,6 +121,9 @@ export function Trees() {
   const trunkRef = useRef(null);
   const pineRef = useRef(null);
   const leafyRef = useRef(null);
+  const trunkOutlineRef = useRef(null);
+  const pineOutlineRef = useRef(null);
+  const leafyOutlineRef = useRef(null);
   const invalidate = useThree((state) => state.invalidate);
 
   const geometries = useMemo(() => {
@@ -130,7 +136,14 @@ export function Trees() {
     const leafy = new THREE.IcosahedronGeometry(0.045, 0);
     leafy.translate(0, TRUNK_HEIGHT + 0.03, 0);
 
-    return { trunk, pine, leafy };
+    return {
+      trunk,
+      pine,
+      leafy,
+      trunkOutline: makeOutlineGeometry(trunk, TREE_OUTLINE),
+      pineOutline: makeOutlineGeometry(pine, TREE_OUTLINE),
+      leafyOutline: makeOutlineGeometry(leafy, TREE_OUTLINE),
+    };
   }, []);
 
   const trees = useMemo(() => {
@@ -179,6 +192,9 @@ export function Trees() {
     fill(trunkRef.current, trees.all);
     fill(pineRef.current, trees.pines);
     fill(leafyRef.current, trees.leafy);
+    fill(trunkOutlineRef.current, trees.all);
+    fill(pineOutlineRef.current, trees.pines);
+    fill(leafyOutlineRef.current, trees.leafy);
     invalidate();
   }, [trees, invalidate]);
 
@@ -189,22 +205,42 @@ export function Trees() {
         args={[geometries.trunk, undefined, trees.all.length]}
         frustumCulled={false}
       >
-        <meshStandardMaterial color={TRUNK_COLOR} flatShading roughness={1} />
+        <meshToonMaterial color={TRUNK_COLOR} gradientMap={toonGradient} />
       </instancedMesh>
       <instancedMesh
         ref={pineRef}
         args={[geometries.pine, undefined, trees.pines.length]}
         frustumCulled={false}
       >
-        <meshStandardMaterial color={PINE_COLOR} flatShading roughness={1} />
+        <meshToonMaterial color={PINE_COLOR} gradientMap={toonGradient} />
       </instancedMesh>
       <instancedMesh
         ref={leafyRef}
         args={[geometries.leafy, undefined, trees.leafy.length]}
         frustumCulled={false}
       >
-        <meshStandardMaterial color={LEAFY_COLOR} flatShading roughness={1} />
+        <meshToonMaterial color={LEAFY_COLOR} gradientMap={toonGradient} />
       </instancedMesh>
+
+      {/* Outlines: same trees, puffed up and drawn inside-out in ink */}
+      <instancedMesh
+        ref={trunkOutlineRef}
+        args={[geometries.trunkOutline, outlineMaterial, trees.all.length]}
+        frustumCulled={false}
+        raycast={() => null}
+      />
+      <instancedMesh
+        ref={pineOutlineRef}
+        args={[geometries.pineOutline, outlineMaterial, trees.pines.length]}
+        frustumCulled={false}
+        raycast={() => null}
+      />
+      <instancedMesh
+        ref={leafyOutlineRef}
+        args={[geometries.leafyOutline, outlineMaterial, trees.leafy.length]}
+        frustumCulled={false}
+        raycast={() => null}
+      />
     </>
   );
 }
@@ -216,10 +252,9 @@ export function Clouds({ animate = false }) {
   const puffGeometry = useMemo(() => new THREE.IcosahedronGeometry(1, 1), []);
   const puffMaterial = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshToonMaterial({
         color: "#ffffff",
-        flatShading: true,
-        roughness: 1,
+        gradientMap: toonGradient,
       }),
     [],
   );
@@ -268,13 +303,19 @@ export function Clouds({ animate = false }) {
       {clouds.map((cloud, i) => (
         <group key={i} position={cloud.position}>
           {cloud.puffs.map((puff, j) => (
-            <mesh
+            <group
               key={j}
-              geometry={puffGeometry}
-              material={puffMaterial}
               position={puff.position}
               scale={[puff.size, puff.size * 0.6, puff.size]}
-            />
+            >
+              <mesh geometry={puffGeometry} material={puffMaterial} />
+              <mesh
+                geometry={puffGeometry}
+                material={outlineMaterial}
+                scale={CLOUD_OUTLINE_SCALE}
+                raycast={() => null}
+              />
+            </group>
           ))}
         </group>
       ))}
