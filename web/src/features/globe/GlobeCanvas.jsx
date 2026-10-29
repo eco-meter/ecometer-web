@@ -5,6 +5,7 @@ import { Markers } from "./Markers";
 import { Planet } from "./Planet";
 import { PLANET_RADIUS } from "./terrain";
 import { Trees, Clouds, Ponds } from "./Scenery";
+import { Mountains, Flowers } from "./Landscape";
 
 const FOV = 35;
 const FILL = 0.9; // planet fills 90% of the canvas's shorter side
@@ -50,7 +51,9 @@ function World({ reducedMotion, focus, restaurants, regions }) {
       <group ref={yawRef}>
         <Planet />
         <Ponds />
+        <Mountains />
         <Trees />
+        <Flowers />
         <Markers restaurants={restaurants} regions={regions} />
       </group>
     </group>

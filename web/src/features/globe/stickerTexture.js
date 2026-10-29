@@ -1,8 +1,6 @@
 import * as THREE from "three";
 import { getCuisineColor } from "./cuisineColors";
 
-// White line icons drawn in the middle of each sticker, one per cuisine.
-// From the Phosphor (Light Weight) and Tabler icon sets via Iconify.
 const CUISINE_ICONS = {
   // Phosphor Light "coffee"
   Cafe: {
@@ -41,66 +39,176 @@ const CUISINE_ICONS = {
   },
 };
 
-const SIZE = 256; // texture size in pixels
-const ICON_SIZE = SIZE * 0.4;
+const INK = "#3a5e43"; // dark green outline, the brand's "thin lines"
+const WALL = "#fbf7ee";
+const WOOD = "#6a4a32";
+const GLASS = "#fff1b8";
+
+// Canvas size. The house is drawn in this box, then scaled onto the globe.
+export const STICKER_WIDTH = 320;
+export const STICKER_HEIGHT = 320;
+
+// House layout inside the canvas
+const BODY_WIDTH = 186;
+const BODY_LEFT = (STICKER_WIDTH - BODY_WIDTH) / 2;
+const BODY_RIGHT = BODY_LEFT + BODY_WIDTH;
+const EAVE_Y = 152; // where the roof meets the walls
+const RIDGE_Y = 52; // top of the roof
+const GROUND_Y = 290;
+const OVERHANG = 22;
+const BADGE = { x: BODY_RIGHT + 18, y: 112, r: 34 };
 
 const cache = new Map();
 
-function drawBase(ctx, cuisine) {
-  const center = SIZE / 2;
-
-  // Shadow, nudged down and right so the sticker looks slightly lifted
-  ctx.fillStyle = "rgba(20, 40, 20, 0.25)";
+function roundedRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
-  ctx.arc(center + 6, center + 8, SIZE * 0.44, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.roundRect(x, y, w, h, r);
+}
 
-  // White border
+// The house's outer silhouette, used for the white die-cut border.
+function houseShape() {
+  const shape = new Path2D();
+  shape.moveTo(BODY_LEFT - OVERHANG, EAVE_Y);
+  shape.lineTo(STICKER_WIDTH / 2, RIDGE_Y);
+  shape.lineTo(BODY_RIGHT + OVERHANG, EAVE_Y);
+  shape.lineTo(BODY_RIGHT, EAVE_Y);
+  shape.lineTo(BODY_RIGHT, GROUND_Y);
+  shape.lineTo(BODY_LEFT, GROUND_Y);
+  shape.lineTo(BODY_LEFT, EAVE_Y);
+  shape.closePath();
+  shape.moveTo(BADGE.x + BADGE.r, BADGE.y);
+  shape.arc(BADGE.x, BADGE.y, BADGE.r, 0, Math.PI * 2);
+  return shape;
+}
+
+// White border with a thin green edge and a soft shadow, like a die-cut sticker.
+function drawBacking(ctx) {
+  const shape = houseShape();
+
+  ctx.save();
+  ctx.shadowColor = "rgba(30, 60, 40, 0.28)";
+  ctx.shadowBlur = 14;
+  ctx.shadowOffsetY = 8;
+  ctx.lineWidth = 38;
+  ctx.strokeStyle = INK;
+  ctx.stroke(shape);
+  ctx.fillStyle = INK;
+  ctx.fill(shape);
+  ctx.restore();
+
+  ctx.lineWidth = 32;
+  ctx.strokeStyle = "#ffffff";
+  ctx.stroke(shape);
   ctx.fillStyle = "#ffffff";
-  ctx.beginPath();
-  ctx.arc(center, center, SIZE * 0.44, 0, Math.PI * 2);
-  ctx.fill();
+  ctx.fill(shape);
+}
 
-  // Cuisine colour
-  ctx.fillStyle = getCuisineColor(cuisine);
+function drawHouse(ctx, roofColor) {
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = INK;
+
+  // Walls
+  ctx.fillStyle = WALL;
+  ctx.fillRect(BODY_LEFT, EAVE_Y - 2, BODY_WIDTH, GROUND_Y - EAVE_Y + 2);
+  ctx.strokeRect(BODY_LEFT, EAVE_Y - 2, BODY_WIDTH, GROUND_Y - EAVE_Y + 2);
+
+  // Roof
+  ctx.fillStyle = roofColor;
   ctx.beginPath();
-  ctx.arc(center, center, SIZE * 0.36, 0, Math.PI * 2);
+  ctx.moveTo(BODY_LEFT - OVERHANG, EAVE_Y);
+  ctx.lineTo(STICKER_WIDTH / 2, RIDGE_Y);
+  ctx.lineTo(BODY_RIGHT + OVERHANG, EAVE_Y);
+  ctx.closePath();
   ctx.fill();
+  ctx.stroke();
+
+  // Striped awning with scalloped edge
+  const awningLeft = BODY_LEFT + 10;
+  const awningWidth = BODY_WIDTH - 20;
+  const stripe = awningWidth / 6;
+  for (let i = 0; i < 6; i++) {
+    const x = awningLeft + i * stripe;
+    ctx.fillStyle = i % 2 ? "#ffffff" : roofColor;
+    ctx.beginPath();
+    ctx.moveTo(x, 176);
+    ctx.lineTo(x + stripe, 176);
+    ctx.lineTo(x + stripe, 200);
+    ctx.arc(x + stripe / 2, 200, stripe / 2, 0, Math.PI);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.beginPath();
+  ctx.moveTo(awningLeft, 176);
+  ctx.lineTo(awningLeft + awningWidth, 176);
+  ctx.stroke();
+
+  // Door
+  ctx.fillStyle = WOOD;
+  roundedRect(ctx, BODY_LEFT + 26, 222, 46, 68, 6);
+  ctx.fill();
+  ctx.stroke();
+
+  // Window
+  ctx.fillStyle = GLASS;
+  roundedRect(ctx, BODY_RIGHT - 82, 222, 56, 44, 6);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(BODY_RIGHT - 54, 222);
+  ctx.lineTo(BODY_RIGHT - 54, 266);
+  ctx.stroke();
+
+  // Round badge for the cuisine icon
+  ctx.fillStyle = WOOD;
+  ctx.beginPath();
+  ctx.arc(BADGE.x, BADGE.y, BADGE.r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
 }
 
 // Turns an icon into an <img> the canvas can draw. Resolves when loaded.
-function loadIcon(icon) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${icon.viewBox}" width="${ICON_SIZE}" height="${ICON_SIZE}">${icon.body}</svg>`;
+function loadIcon(icon, size) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${icon.viewBox}" width="${size}" height="${size}">${icon.body}</svg>`;
   const image = new Image();
   image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
   return image.decode().then(() => image);
 }
 
-// Draws a round sticker: soft shadow, white border, cuisine color, icon.
-// Each cuisine is drawn once and reused by every restaurant that shares it.`
+// Draws a house sticker: die-cut border, cuisine-coloured roof and awning,
+// and a badge with the cuisine icon. Each cuisine is drawn once and reused.
 // The icon loads a moment later; `texture.userData.ready` resolves when it's in.
 export function getStickerTexture(cuisine) {
   if (cache.has(cuisine)) return cache.get(cuisine);
 
   const canvas = document.createElement("canvas");
-  canvas.width = SIZE;
-  canvas.height = SIZE;
+  canvas.width = STICKER_WIDTH;
+  canvas.height = STICKER_HEIGHT;
   const ctx = canvas.getContext("2d");
-  drawBase(ctx, cuisine);
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+
+  drawBacking(ctx);
+  drawHouse(ctx, getCuisineColor(cuisine));
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = 4;
+  texture.anisotropy = 8;
 
   const icon = CUISINE_ICONS[cuisine];
+  const iconSize = BADGE.r * 1.25;
   texture.userData.ready = icon
-    ? loadIcon(icon)
+    ? loadIcon(icon, iconSize)
         .then((image) => {
-          const offset = (SIZE - ICON_SIZE) / 2;
-          ctx.drawImage(image, offset, offset, ICON_SIZE, ICON_SIZE);
+          ctx.drawImage(
+            image,
+            BADGE.x - iconSize / 2,
+            BADGE.y - iconSize / 2,
+            iconSize,
+            iconSize,
+          );
           texture.needsUpdate = true;
         })
-        .catch(() => {}) // if an icon fails, the plain sticker still shows
+        .catch(() => {}) // if an icon fails, the sticker still shows
     : Promise.resolve();
 
   cache.set(cuisine, texture);
