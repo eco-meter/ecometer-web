@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { useThree } from "@react-three/fiber";
-import { Billboard, Html } from "@react-three/drei";
+import { Html } from "@react-three/drei";
+import * as THREE from "three";
 import { REGION_PLACEMENTS } from "./regionPlacements";
 import { restaurantToGlobe } from "./globeMath";
 import { surfaceRadius } from "./terrain";
 import { getCuisineColor } from "./cuisineColors";
+import { getStickerTexture } from "./stickerTexture";
 
-const WALL_COLOR = "#faf6ec";
-const DOOR_COLOR = "#5a4030";
-
-// Turns each house slightly so you see its front, side and roof.
-const HOUSE_TILT = 0.25;
-const HOUSE_TURN = -0.5;
+// Size of each sticker on the planet (the planet's radius is 1.6).
+const STICKER_RADIUS = 0.09;
+// How far stickers sit above the ground, so hills don't poke through.
+const STICKER_LIFT = 0.012;
 const MAX_TOTAL = 300;
 
 function getTotal(restaurant) {
@@ -75,9 +75,29 @@ function HouseCard({ restaurant }) {
   );
 }
 
-function House({ restaurant, position, hovered, onHover }) {
+function Sticker({ restaurant, position, hovered, onHover }) {
   const invalidate = useThree((state) => state.invalidate);
-  const roofColor = getCuisineColor(restaurant.cuisine);
+  const texture = getStickerTexture(restaurant.cuisine);
+
+  // Lay the sticker flat on the ground, facing out from the planet.
+  // lookAt points the sticker's front (+Z) away from the centre.
+  const orientation = useMemo(() => {
+    const helper = new THREE.Object3D();
+    helper.position.copy(position);
+    helper.lookAt(position.clone().multiplyScalar(2));
+    return helper.quaternion.clone();
+  }, [position]);
+
+  // Redraw once the icon has loaded onto the sticker.
+  useEffect(() => {
+    let cancelled = false;
+    texture.userData.ready.then(() => {
+      if (!cancelled) invalidate();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [texture, invalidate]);
 
   // Redraw when hover changes, since the canvas only draws on demand.
   useEffect(() => {
@@ -85,7 +105,7 @@ function House({ restaurant, position, hovered, onHover }) {
   }, [hovered, invalidate]);
 
   const handlePointerOver = (event) => {
-    // Ignore houses the mouse passes over while dragging the globe.
+    // Ignore stickers the mouse passes over while dragging the globe.
     if (event.pointerType === "mouse" && event.buttons > 0) return;
     event.stopPropagation();
     onHover(restaurant.id);
@@ -96,42 +116,33 @@ function House({ restaurant, position, hovered, onHover }) {
   };
 
   return (
-    <Billboard position={position}>
-      <group rotation={[HOUSE_TILT, HOUSE_TURN, 0]} scale={hovered ? 1.15 : 1}>
-        <mesh position-y={0.035}>
-          <boxGeometry args={[0.09, 0.07, 0.07]} />
-          <meshStandardMaterial color={WALL_COLOR} flatShading />
-        </mesh>
-        <mesh position-y={0.1} rotation-y={Math.PI / 4}>
-          <coneGeometry args={[0.075, 0.06, 4]} />
-          <meshStandardMaterial color={roofColor} flatShading />
-        </mesh>
-        <mesh position={[0, 0.02, 0.0355]}>
-          <boxGeometry args={[0.022, 0.04, 0.002]} />
-          <meshStandardMaterial color={DOOR_COLOR} />
-        </mesh>
-      </group>
+    <group position={position} quaternion={orientation}>
+      <mesh scale={hovered ? 1.2 : 1}>
+        <circleGeometry args={[STICKER_RADIUS, 32]} />
+        <meshBasicMaterial
+          map={texture}
+          transparent
+          polygonOffset
+          polygonOffsetFactor={-4}
+        />
+      </mesh>
 
-      {/* Invisible, larger hover target so small houses are easy to hit. */}
-      <mesh
-        position-y={0.06}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
-      >
-        <sphereGeometry args={[0.1, 12, 12]} />
+      {/* Invisible, larger hover target so small stickers are easy to hit. */}
+      <mesh onPointerOver={handlePointerOver} onPointerOut={handlePointerOut}>
+        <circleGeometry args={[STICKER_RADIUS * 1.4, 16]} />
         <meshBasicMaterial colorWrite={false} depthWrite={false} />
       </mesh>
 
       {hovered && (
         <Html
-          position={[0, 0.16, 0]}
+          position={[0, 0, 0.08]}
           zIndexRange={[5, 0]}
           style={{ pointerEvents: "none" }}
         >
           <HouseCard restaurant={restaurant} />
         </Html>
       )}
-    </Billboard>
+    </group>
   );
 }
 
@@ -158,10 +169,9 @@ export function Markers({ restaurants, regions }) {
       }
 
       const direction = restaurantToGlobe(restaurant, region, placement, 1);
-      // Sink the base a hair into the ground so no gap shows underneath.
       const position = direction
         .clone()
-        .multiplyScalar(surfaceRadius(direction) - 0.003);
+        .multiplyScalar(surfaceRadius(direction) + STICKER_LIFT);
 
       return [{ restaurant, position }];
     });
@@ -176,7 +186,7 @@ export function Markers({ restaurants, regions }) {
   return (
     <>
       {placed.map(({ restaurant, position }) => (
-        <House
+        <Sticker
           key={restaurant.id}
           restaurant={restaurant}
           position={position}
