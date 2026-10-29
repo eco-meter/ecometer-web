@@ -1,17 +1,37 @@
-import { useEffect, useMemo, useState } from "react";
-import { useThree } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Billboard, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { REGION_PLACEMENTS } from "./regionPlacements";
 import { restaurantToGlobe } from "./globeMath";
 import { surfaceRadius } from "./terrain";
 import { getCuisineColor } from "./cuisineColors";
-import { getStickerTexture } from "./stickerTexture";
+import {
+  getStickerTexture,
+  STICKER_WIDTH,
+  STICKER_HEIGHT,
+} from "./stickerTexture";
 
-// Size of each sticker on the planet (the planet's radius is 1.6).
-const STICKER_RADIUS = 0.09;
-// How far stickers sit above the ground, so hills don't poke through.
-const STICKER_LIFT = 0.012;
+// Height of each sticker on the planet (the planet's radius is 1.6).
+const STICKER_SIZE = 0.38;
+// How far stickers sit above the ground.
+const STICKER_LIFT = 0.01;
+// How directly a sticker must face the camera to show (0 = edge-on).
+const MIN_FACING = 0.12;
+const INK = "#3a5e43";
+const UP = new THREE.Vector3(0, 1, 0);
+
+// One shared plane for every sticker, with its bottom edge at the ground.
+const stickerGeometry = (() => {
+  const width = STICKER_SIZE * (STICKER_WIDTH / STICKER_HEIGHT);
+  const geometry = new THREE.PlaneGeometry(width, STICKER_SIZE);
+  geometry.translate(0, STICKER_SIZE / 2 - 0.035, 0);
+  return geometry;
+})();
+
+// Reused every frame instead of making new vectors.
+const worldPosition = new THREE.Vector3();
+const toCamera = new THREE.Vector3();
 const MAX_TOTAL = 300;
 
 function getTotal(restaurant) {
@@ -78,15 +98,33 @@ function HouseCard({ restaurant }) {
 function Sticker({ restaurant, position, hovered, onHover }) {
   const invalidate = useThree((state) => state.invalidate);
   const texture = getStickerTexture(restaurant.cuisine);
+  const anchorRef = useRef(null);
+  const visibleRef = useRef(true);
 
-  // Lay the sticker flat on the ground, facing out from the planet.
-  // lookAt points the sticker's front (+Z) away from the centre.
-  const orientation = useMemo(() => {
-    const helper = new THREE.Object3D();
-    helper.position.copy(position);
-    helper.lookAt(position.clone().multiplyScalar(2));
-    return helper.quaternion.clone();
-  }, [position]);
+  // Each sticker leans a few degrees, like it was placed by hand.
+  const tilt = ((restaurant.id * 37) % 9) / 100 - 0.04;
+
+  // Soft shadow lies flat on the ground under the sticker.
+  const groundRotation = useMemo(
+    () =>
+      new THREE.Quaternion().setFromUnitVectors(
+        UP,
+        position.clone().normalize(),
+      ),
+    [position],
+  );
+
+  // Hide stickers on the far side of the planet. They draw on top of the
+  // planet (so they never sink into hills), so they need hiding manually.
+  useFrame(({ camera }) => {
+    const anchor = anchorRef.current;
+    if (!anchor) return;
+    anchor.getWorldPosition(worldPosition);
+    toCamera.copy(camera.position).sub(worldPosition).normalize();
+    const facing = worldPosition.normalize().dot(toCamera) > MIN_FACING;
+    anchor.visible = facing;
+    visibleRef.current = facing;
+  });
 
   // Redraw once the icon has loaded onto the sticker.
   useEffect(() => {
@@ -107,6 +145,7 @@ function Sticker({ restaurant, position, hovered, onHover }) {
   const handlePointerOver = (event) => {
     // Ignore stickers the mouse passes over while dragging the globe.
     if (event.pointerType === "mouse" && event.buttons > 0) return;
+    if (!visibleRef.current) return;
     event.stopPropagation();
     onHover(restaurant.id);
   };
@@ -116,32 +155,53 @@ function Sticker({ restaurant, position, hovered, onHover }) {
   };
 
   return (
-    <group position={position} quaternion={orientation}>
-      <mesh scale={hovered ? 1.2 : 1}>
-        <circleGeometry args={[STICKER_RADIUS, 32]} />
+    <group position={position} ref={anchorRef}>
+      <mesh
+        quaternion={groundRotation}
+        position={position.clone().normalize().multiplyScalar(0.004)}
+      >
+        <circleGeometry args={[STICKER_SIZE * 0.4, 24]} />
         <meshBasicMaterial
-          map={texture}
+          color={INK}
           transparent
-          polygonOffset
-          polygonOffsetFactor={-4}
+          opacity={0.14}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* Invisible, larger hover target so small stickers are easy to hit. */}
-      <mesh onPointerOver={handlePointerOver} onPointerOut={handlePointerOut}>
-        <circleGeometry args={[STICKER_RADIUS * 1.4, 16]} />
-        <meshBasicMaterial colorWrite={false} depthWrite={false} />
-      </mesh>
+      <Billboard>
+        <group rotation-z={tilt} scale={hovered ? 1.12 : 1}>
+          <mesh geometry={stickerGeometry} renderOrder={10}>
+            <meshBasicMaterial
+              map={texture}
+              transparent
+              alphaTest={0.02}
+              toneMapped={false}
+              depthTest={false}
+              depthWrite={false}
+            />
+          </mesh>
+        </group>
 
-      {hovered && (
-        <Html
-          position={[0, 0, 0.08]}
-          zIndexRange={[5, 0]}
-          style={{ pointerEvents: "none" }}
+        {/* Invisible hover target matching the sticker. */}
+        <mesh
+          geometry={stickerGeometry}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
         >
-          <HouseCard restaurant={restaurant} />
-        </Html>
-      )}
+          <meshBasicMaterial colorWrite={false} depthWrite={false} />
+        </mesh>
+
+        {hovered && (
+          <Html
+            position={[0, STICKER_SIZE * 0.95, 0]}
+            zIndexRange={[5, 0]}
+            style={{ pointerEvents: "none" }}
+          >
+            <HouseCard restaurant={restaurant} />
+          </Html>
+        )}
+      </Billboard>
     </group>
   );
 }
