@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import { useRestaurant } from "../hooks/useRestaurants.js";
 import { getTotal } from "../lib/scores.js";
+import RestaurantInfo from "../features/restaurant/RestaurantInfo.jsx";
 import EcoGauge from "../features/gauge/EcoGauge.jsx";
 import MetricCards from "../features/scoring/MetricCards.jsx";
 import "./Restaurant.css";
 
-// Restaurant page. Gauge and metric cards are in; the info card
-// (left column) and achievements come next.
+// Restaurant page: info card, gauge and metric cards.
+// Achievements go underneath these later.
 export default function Restaurant() {
   const { slug } = useParams();
   const { data: restaurant, isPending, isError } = useRestaurant(slug);
@@ -19,9 +21,17 @@ export default function Restaurant() {
 
   return (
     <section className='restaurant-page'>
-      <h1 className='restaurant-page__name'>{restaurant.name}</h1>
+      <div className='restaurant-page__layout'>
+        <div className='restaurant-page__info'>
+          {restaurant.verified && (
+            <p className='restaurant-page__verified'>
+              <Icon icon='ph:seal-check-fill' aria-hidden='true' />
+              EcoMeter Verified
+            </p>
+          )}
+          <RestaurantInfo restaurant={restaurant} />
+        </div>
 
-      <div className='restaurant-page__scores'>
         <EcoGauge total={getTotal(restaurant)} />
         <MetricCards restaurant={restaurant} />
       </div>

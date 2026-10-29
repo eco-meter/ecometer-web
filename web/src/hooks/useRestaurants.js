@@ -35,7 +35,7 @@ async function fetchRestaurant(slug) {
   const { data, error } = await supabase
     .from("restaurants")
     .select(
-      "id, slug, name, cuisine, price_level, photo_path, food_score, packaging_score, supply_score, verified, region:regions(slug, name)",
+      "id, slug, name, cuisine, price_level, photo_path, food_score, packaging_score, supply_score, verified, description, address, tags, google_rating, google_review_count, score_updated_at, region:regions(slug, name)",
     )
     .eq("slug", slug)
     .maybeSingle();
