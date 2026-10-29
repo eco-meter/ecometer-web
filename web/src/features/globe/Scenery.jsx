@@ -4,7 +4,13 @@ import * as THREE from "three";
 import { globeToVector } from "./globeMath";
 import { PLANET_RADIUS, surfaceRadius } from "./terrain";
 import { isClearOfRegions } from "./regionZones";
-import { makeOutlineGeometry, outlineMaterial, toonGradient } from "./toon";
+import { isClearOfMountains } from "./landmarks";
+import {
+  INK,
+  makeOutlineGeometry,
+  outlineMaterial,
+  toonGradient,
+} from "./toon";
 
 const UP = new THREE.Vector3(0, 1, 0);
 const DEG_TO_RAD = Math.PI / 180;
@@ -15,15 +21,19 @@ const TRUNK_HEIGHT = 0.04;
 const CROWN_HEIGHT = 0.09;
 const TRUNK_COLOR = "#7a5a3a";
 const PINE_COLOR = "#43924f";
-const LEAFY_COLOR = "#8fd27a";
+// Round trees come in green, blossom pink and autumn yellow and orange.
+// Green is listed twice so it stays the most common.
+const LEAFY_COLORS = ["#8fd27a", "#8fd27a", "#f4b6c8", "#f2c75c", "#e9a14a"];
 const TREE_OUTLINE = 0.006; // outline thickness on trees
 const CLOUD_OUTLINE_SCALE = 1.12;
 
 const POND_COUNT = 3;
 const POND_SPACING = 25 * DEG_TO_RAD;
 const POND_TREE_GAP = 2 * DEG_TO_RAD;
-const WATER_COLOR = "#7cc6c9";
-const SHORE_COLOR = "#e6dcae";
+const WATER_COLOR = "#8fd6dc";
+const SHORE_COLOR = "#efe3b8";
+const SHORE_WIDTH = 1.18; // shore size as a multiple of the pond
+const RIM_WIDTH = 1.25; // dark outline just past the shore
 
 const CLOUD_COUNT = 7;
 const CLOUD_MIN_ALTITUDE = 1.3; // multiples of the planet radius
@@ -95,21 +105,17 @@ export function Ponds() {
             pond.direction,
           )}
         >
+          <mesh rotation-x={-Math.PI / 2} position-y={-0.002}>
+            <circleGeometry args={[pond.size * RIM_WIDTH, 9]} />
+            <meshBasicMaterial color={INK} />
+          </mesh>
           <mesh rotation-x={-Math.PI / 2} position-y={-0.001}>
-            <circleGeometry args={[pond.size * 1.18, 9]} />
-            <meshStandardMaterial
-              color={SHORE_COLOR}
-              flatShading
-              roughness={1}
-            />
+            <circleGeometry args={[pond.size * SHORE_WIDTH, 9]} />
+            <meshToonMaterial color={SHORE_COLOR} gradientMap={toonGradient} />
           </mesh>
           <mesh rotation-x={-Math.PI / 2}>
             <circleGeometry args={[pond.size, 9]} />
-            <meshStandardMaterial
-              color={WATER_COLOR}
-              flatShading
-              roughness={1}
-            />
+            <meshToonMaterial color={WATER_COLOR} gradientMap={toonGradient} />
           </mesh>
         </group>
       ))}
@@ -154,7 +160,13 @@ export function Trees() {
     while (list.length < TREE_COUNT && attempts < TREE_COUNT * 20) {
       attempts++;
       const direction = randomDirection(random, 75);
-      if (!isClearOfRegions(direction) || !isClearOfPonds(direction)) continue;
+      if (
+        !isClearOfRegions(direction) ||
+        !isClearOfPonds(direction) ||
+        !isClearOfMountains(direction)
+      ) {
+        continue;
+      }
 
       const position = direction
         .clone()
@@ -176,10 +188,18 @@ export function Trees() {
       });
     }
 
+    // Colours use their own random numbers so tree positions don't change.
+    const colorRandom = createRandom(11);
+    const leafy = list.filter((tree) => tree.leafy);
+    leafy.forEach((tree) => {
+      const pick = Math.floor(colorRandom() * LEAFY_COLORS.length);
+      tree.color = new THREE.Color(LEAFY_COLORS[pick]);
+    });
+
     return {
       all: list,
       pines: list.filter((tree) => !tree.leafy),
-      leafy: list.filter((tree) => tree.leafy),
+      leafy,
     };
   }, []);
 
@@ -195,6 +215,11 @@ export function Trees() {
     fill(trunkOutlineRef.current, trees.all);
     fill(pineOutlineRef.current, trees.pines);
     fill(leafyOutlineRef.current, trees.leafy);
+
+    trees.leafy.forEach((tree, i) =>
+      leafyRef.current.setColorAt(i, tree.color),
+    );
+    leafyRef.current.instanceColor.needsUpdate = true;
     invalidate();
   }, [trees, invalidate]);
 
@@ -219,7 +244,7 @@ export function Trees() {
         args={[geometries.leafy, undefined, trees.leafy.length]}
         frustumCulled={false}
       >
-        <meshToonMaterial color={LEAFY_COLOR} gradientMap={toonGradient} />
+        <meshToonMaterial gradientMap={toonGradient} />
       </instancedMesh>
 
       {/* Outlines: same trees, puffed up and drawn inside-out in ink */}
