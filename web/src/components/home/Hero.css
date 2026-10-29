@@ -30,13 +30,6 @@
   justify-content: center;
 }
 
-.hero__globe {
-  width: 100%;
-  max-width: 996px;
-  height: auto;
-  display: block;
-}
-
 @media (max-width: 480px) {
   .hero__heading {
     padding: var(--space-8) var(--content-margin) var(--space-6);

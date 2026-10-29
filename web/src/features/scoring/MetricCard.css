@@ -1,0 +1,118 @@
+.metric-card {
+  background: var(--color-green-tint);
+  border: 3px solid var(--color-brand-green);
+  border-radius: 24px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Header row (the whole row is the button) */
+.metric-card__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-4) var(--space-6);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.metric-card__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.metric-card__chevron {
+  width: 25px;
+  height: 25px;
+  transition: transform 0.25s ease;
+}
+
+.metric-card--open .metric-card__chevron {
+  transform: rotate(180deg);
+}
+
+/* Expanding panel: animates from 0 to its natural height */
+.metric-card__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.metric-card--open .metric-card__panel {
+  grid-template-rows: 1fr;
+}
+
+.metric-card__panel-inner {
+  overflow: hidden;
+}
+
+.metric-card__explainer {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  margin: 0 var(--space-4) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-cream);
+  overflow: hidden;
+}
+
+.metric-card__copy {
+  padding: var(--space-4);
+}
+
+.metric-card__heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.metric-card__description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* Simple hill scene behind the small dial */
+.metric-card__scene {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(120% 60% at 50% 100%, #b5d94a 60%, transparent 61%),
+    var(--color-cream);
+}
+
+.metric-card__scene .score-dial {
+  margin-bottom: var(--space-8);
+}
+
+@media (max-width: 480px) {
+  .metric-card__title {
+    font-size: 18px;
+  }
+
+  .metric-card__explainer {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-card__scene {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metric-card__panel,
+  .metric-card__chevron {
+    transition: none;
+  }
+}

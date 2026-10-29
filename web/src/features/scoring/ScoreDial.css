@@ -1,0 +1,41 @@
+.score-dial {
+  position: relative;
+  width: var(--dial-size);
+  height: var(--dial-size);
+  flex-shrink: 0;
+}
+
+.score-dial__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.score-dial__track,
+.score-dial__progress {
+  fill: none;
+  stroke-width: 7;
+}
+
+.score-dial__track {
+  stroke: var(--color-white);
+}
+
+.score-dial__progress {
+  stroke: var(--color-brand-green);
+  stroke-linecap: round;
+}
+
+.score-dial__value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: calc(var(--dial-size) * 0.24);
+  color: var(--color-green-deepest);
+  font-variant-numeric: tabular-nums;
+}

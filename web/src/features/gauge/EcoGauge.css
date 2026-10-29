@@ -1,0 +1,92 @@
+.eco-gauge {
+  width: min(100%, 280px);
+  margin-inline: auto;
+}
+
+.eco-gauge svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Casing */
+.eco-gauge__casing-outline {
+  fill: var(--color-green-dark);
+  stroke: var(--color-green-dark);
+  stroke-width: 6;
+}
+
+.eco-gauge__casing {
+  fill: var(--color-cream);
+}
+
+/* Channel and fluid */
+.eco-gauge__track {
+  fill: var(--color-green-tint);
+}
+
+.eco-gauge__stop--top {
+  stop-color: var(--color-green-light);
+}
+
+.eco-gauge__stop--bottom {
+  stop-color: var(--color-brand-green);
+}
+
+.eco-gauge__fluid {
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Bulb */
+.eco-gauge__bulb {
+  fill: var(--color-brand-green);
+}
+
+.eco-gauge__highlight {
+  fill: var(--color-white);
+  opacity: 0.7;
+}
+
+/* Scale */
+.eco-gauge__tick {
+  stroke: var(--color-text);
+  stroke-width: 2;
+}
+
+.eco-gauge__scale-label {
+  font-family: var(--font-body);
+  font-size: 22px;
+  fill: var(--color-text-secondary);
+}
+
+/* Score text */
+.eco-gauge__bulb-label,
+.eco-gauge__value,
+.eco-gauge__max {
+  font-family: var(--font-heading);
+  fill: var(--color-green-deepest);
+}
+
+.eco-gauge__bulb-label {
+  font-size: 22px;
+  letter-spacing: 0.08em;
+}
+
+.eco-gauge__value {
+  font-size: 84px;
+  font-weight: 600;
+}
+
+.eco-gauge__value--empty {
+  font-size: 56px;
+}
+
+.eco-gauge__max {
+  font-size: 26px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eco-gauge__fluid {
+    transition: none;
+  }
+}

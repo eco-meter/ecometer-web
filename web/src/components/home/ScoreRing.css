@@ -1,63 +1,85 @@
 .score-ring {
-  background: var(--color-border);
-  border-radius: 11px;
-  padding: 17px 15px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2);
+  min-width: 0;
 }
 
 .score-ring__label {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 14px;
-  color: var(--color-black);
+  font-size: 13px;
+  color: var(--color-text);
   margin: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .score-ring__stack {
   position: relative;
-  width: 68px;
-  height: 68px;
+  width: 100%;
+  max-width: 64px;
+  aspect-ratio: 1;
 }
 
 .score-ring__svg {
+  display: block;
   width: 100%;
   height: 100%;
-}
-
-.score-ring__outer-disc {
-  fill: #e8e5da;
-}
-
-.score-ring__inner-disc {
-  fill: #f4f3e8;
-  stroke: #000;
-  stroke-width: 1;
+  transform: rotate(-90deg);
 }
 
 .score-ring__track {
-  fill: var(--color-white);
-  stroke: var(--color-cream);
-  stroke-width: 4;
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 6;
 }
 
 .score-ring__progress {
   fill: none;
   stroke: var(--color-brand-green);
-  stroke-width: 4;
+  stroke-width: 6;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.3s ease;
 }
 
 .score-ring__value {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--color-black);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-ring__value--empty {
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* Narrow cards (mobile): tighten so "Packaging" fits without cutting off */
+@container card (max-width: 300px) {
+  .score-ring {
+    padding: var(--space-2) var(--space-1);
+  }
+
+  .score-ring__label {
+    font-size: 11px;
+  }
+
+  .score-ring__value {
+    font-size: 13px;
+  }
 }

@@ -1,4 +1,5 @@
 import globeSrc from "../../assets/globe.svg";
+import GlobeSection from "../../features/globe/GlobeSection";
 import "./Hero.css";
 
 export default function Hero() {
@@ -13,7 +14,7 @@ export default function Hero() {
       </div>
 
       <div className='hero__globe-band'>
-        <img src={globeSrc} alt='' className='hero__globe' />
+        <GlobeSection fallbackSrc={globeSrc} />
       </div>
     </div>
   );
