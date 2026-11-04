@@ -18,6 +18,8 @@ const STICKER_SIZE = 0.38;
 const STICKER_LIFT = 0.01;
 // How directly a sticker must face the camera to show (0 = edge-on).
 const MIN_FACING = 0.12;
+// Pointer movement (px) past which a press counts as a drag, not a click.
+const DRAG_THRESHOLD = 6;
 const INK = "#3a5e43";
 const UP = new THREE.Vector3(0, 1, 0);
 
@@ -95,11 +97,12 @@ function HouseCard({ restaurant }) {
   );
 }
 
-function Sticker({ restaurant, position, hovered, onHover }) {
+function Sticker({ restaurant, position, hovered, onHover, onOpen }) {
   const invalidate = useThree((state) => state.invalidate);
   const texture = getStickerTexture(restaurant.cuisine);
   const anchorRef = useRef(null);
   const visibleRef = useRef(true);
+  const pressRef = useRef({ pointerType: "mouse", wasHovered: false });
 
   // Each sticker leans a few degrees, like it was placed by hand.
   const tilt = ((restaurant.id * 37) % 9) / 100 - 0.04;
@@ -154,6 +157,30 @@ function Sticker({ restaurant, position, hovered, onHover }) {
     onHover((current) => (current === restaurant.id ? null : current));
   };
 
+  // Remember how the press started, for the click below.
+  const handlePointerDown = (event) => {
+    pressRef.current = {
+      pointerType: event.pointerType,
+      wasHovered: hovered,
+    };
+  };
+
+  // Mouse: a click opens the restaurant page.
+  // Touch: the first tap shows the card, a second tap opens the page.
+  const handleClick = (event) => {
+    if (!visibleRef.current) return;
+    if (event.delta > DRAG_THRESHOLD) return; // the globe was dragged
+    event.stopPropagation();
+
+    const { pointerType, wasHovered } = pressRef.current;
+    if (pointerType !== "mouse" && !wasHovered) {
+      onHover(restaurant.id);
+      return;
+    }
+
+    onOpen(restaurant.slug);
+  };
+
   return (
     <group position={position} ref={anchorRef}>
       <mesh
@@ -188,6 +215,8 @@ function Sticker({ restaurant, position, hovered, onHover }) {
           geometry={stickerGeometry}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
+          onPointerDown={handlePointerDown}
+          onClick={handleClick}
         >
           <meshBasicMaterial colorWrite={false} depthWrite={false} />
         </mesh>
@@ -206,7 +235,7 @@ function Sticker({ restaurant, position, hovered, onHover }) {
   );
 }
 
-export function Markers({ restaurants, regions }) {
+export function Markers({ restaurants, regions, onOpenRestaurant }) {
   const [hoveredId, setHoveredId] = useState(null);
 
   const placed = useMemo(() => {
@@ -252,6 +281,7 @@ export function Markers({ restaurants, regions }) {
           position={position}
           hovered={hoveredId === restaurant.id}
           onHover={setHoveredId}
+          onOpen={onOpenRestaurant}
         />
       ))}
     </>

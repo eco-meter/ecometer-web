@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useSpin } from "./useSpin";
@@ -33,7 +34,13 @@ function Halo() {
   );
 }
 
-function World({ reducedMotion, focus, restaurants, regions }) {
+function World({
+  reducedMotion,
+  focus,
+  restaurants,
+  regions,
+  onOpenRestaurant,
+}) {
   const aspect = useThree((state) => state.size.width / state.size.height);
   const baseDistance = fitDistance(aspect);
 
@@ -54,7 +61,11 @@ function World({ reducedMotion, focus, restaurants, regions }) {
         <Mountains />
         <Trees />
         <Flowers />
-        <Markers restaurants={restaurants} regions={regions} />
+        <Markers
+          restaurants={restaurants}
+          regions={regions}
+          onOpenRestaurant={onOpenRestaurant}
+        />
       </group>
     </group>
   );
@@ -67,6 +78,9 @@ export default function GlobeCanvas({
   restaurants = [],
   regions = [],
 }) {
+  // Navigate from out here: the router lives outside the 3D canvas.
+  const navigate = useNavigate();
+  const openRestaurant = (slug) => navigate(`/restaurant/${slug}`);
   return (
     <Canvas
       flat
@@ -85,6 +99,7 @@ export default function GlobeCanvas({
         focus={focus}
         restaurants={restaurants}
         regions={regions}
+        onOpenRestaurant={openRestaurant}
       />
     </Canvas>
   );

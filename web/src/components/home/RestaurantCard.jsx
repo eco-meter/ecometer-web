@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ScoreRing from "./ScoreRing.jsx";
 import "./RestaurantCard.css";
 
@@ -14,6 +15,7 @@ function getTotal(scores) {
 
 export default function RestaurantCard({ restaurant }) {
   const {
+    slug,
     name,
     cuisine,
     price_level,
@@ -40,7 +42,12 @@ export default function RestaurantCard({ restaurant }) {
 
       <div className='restaurant-card__body'>
         <div className='restaurant-card__header'>
-          <h3 className='restaurant-card__name'>{name}</h3>
+          <h3 className='restaurant-card__name'>
+            {/* The link stretches over the whole card (see the CSS), so screen readers announce just the name. */}
+            <Link to={`/restaurant/${slug}`} className='restaurant-card__link'>
+              {name}
+            </Link>
+          </h3>
           <p className='restaurant-card__tag'>
             {formatTag(cuisine, price_level)}
           </p>
