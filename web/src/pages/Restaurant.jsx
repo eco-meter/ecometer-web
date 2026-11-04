@@ -5,9 +5,10 @@ import { getTotal } from "../lib/scores.js";
 import RestaurantInfo from "../features/restaurant/RestaurantInfo.jsx";
 import EcoGauge from "../features/gauge/EcoGauge.jsx";
 import MetricCards from "../features/scoring/MetricCards.jsx";
+import AchievementsPanel from "../features/achievements/AchievementsPanel.jsx";
 import "./Restaurant.css";
 
-// Restaurant page: info card, gauge and metric cards.
+// Restaurant page: info card, gauge and metric cards, with achievements underneath.
 // Achievements go underneath these later.
 export default function Restaurant() {
   const { slug } = useParams();
@@ -35,6 +36,8 @@ export default function Restaurant() {
         <EcoGauge total={getTotal(restaurant)} />
         <MetricCards restaurant={restaurant} />
       </div>
+
+      <AchievementsPanel achievements={restaurant.achievements} />
     </section>
   );
 }

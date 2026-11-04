@@ -1,0 +1,276 @@
+/* "Additional Achievements" card on the restaurant page */
+.achievements-panel {
+  position: relative;
+  margin-top: var(--space-16);
+}
+
+.achievements-panel__sparks {
+  position: absolute;
+  top: -44px;
+  left: -40px;
+  width: 78px;
+  height: 84px;
+  fill: none;
+  stroke: #e8a33d;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.achievements-panel__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-16) var(--space-12);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.achievements-panel__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 25px;
+  color: var(--color-green-dark);
+}
+
+.achievements-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Badges revealed by "Show all" fade in */
+.achievement-badge--extra {
+  animation: achievements-fade-in 0.25s ease;
+}
+
+.achievements-panel__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: center;
+  padding: 12px 24px;
+  background: transparent;
+  border: 1.5px solid #0e1c14;
+  border-radius: var(--radius-md);
+  color: #0e1c14;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.achievements-panel__toggle:hover {
+  background: #0e1c14;
+  color: var(--color-cream);
+}
+
+.achievements-panel__chevron {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.25s ease;
+}
+
+.achievements-panel__toggle[aria-expanded="true"] .achievements-panel__chevron {
+  transform: rotate(180deg);
+}
+
+/* One badge: sticker, name, and a popover underneath when open */
+.achievement-badge {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.achievement-badge--open {
+  z-index: 2; /* sits above the badges below it */
+}
+
+.achievement-badge__button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.achievement-badge__sticker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  transition: transform 0.2s ease;
+}
+
+/* Inner disc with the white rim */
+.achievement-badge__sticker::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 15px;
+  width: 14px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  transform: rotate(30deg);
+}
+
+.achievement-badge__button:hover .achievement-badge__sticker,
+.achievement-badge--open .achievement-badge__sticker {
+  transform: translateY(-2px) rotate(-4deg);
+}
+
+.achievement-badge__emblem {
+  position: relative; /* above the disc */
+  width: 34px;
+  height: 34px;
+  color: var(--color-green-dark);
+  object-fit: contain;
+}
+
+.achievement-badge__check {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-brand-green);
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
+  font-size: 11px;
+}
+
+.achievement-badge__name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.25;
+  text-align: center;
+}
+
+/* Popover */
+.achievement-badge__popover {
+  --shift: 0px;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  translate: calc(-50% + var(--shift)) 0;
+  width: 240px;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 16px rgba(20, 20, 20, 0.08);
+  text-align: center;
+  animation: achievements-pop-in 0.18s ease;
+}
+
+/* Little arrow pointing up at the badge */
+.achievement-badge__popover::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: calc(50% - var(--shift));
+  width: 12px;
+  height: 12px;
+  translate: -50% 0;
+  rotate: 45deg;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+}
+
+.achievement-badge__popover-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.achievement-badge__description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.achievement-badge__earned {
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+@keyframes achievements-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes achievements-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .achievements-panel__card {
+    padding: var(--space-8) var(--space-6) var(--space-12);
+  }
+
+  .achievements-panel__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .achievements-panel__sparks {
+    left: -16px;
+  }
+}
+
+/* Phone */
+@media (max-width: 480px) {
+  .achievements-panel__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .achievements-panel__title {
+    font-size: 22px;
+  }
+
+  .achievements-panel__sparks {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement-badge__sticker,
+  .achievements-panel__chevron {
+    transition: none;
+  }
+
+  .achievement-badge__popover,
+  .achievement-badge--extra {
+    animation: none;
+  }
+}
