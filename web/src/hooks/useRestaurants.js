@@ -55,7 +55,7 @@ function toAchievements(earned = []) {
   return earned
     .map(({ earned_on, achievement }) => ({
       ...achievement,
-      earned_on: earned_on,
+      earnedOn: earned_on,
       emblemUrl: getPhotoUrl(achievement.emblem_path),
     }))
     .sort((a, b) => a.sort_order - b.sort_order);

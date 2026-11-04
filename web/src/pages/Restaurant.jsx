@@ -9,7 +9,6 @@ import AchievementsPanel from "../features/achievements/AchievementsPanel.jsx";
 import "./Restaurant.css";
 
 // Restaurant page: info card, gauge and metric cards, with achievements underneath.
-// Achievements go underneath these later.
 export default function Restaurant() {
   const { slug } = useParams();
   const { data: restaurant, isPending, isError } = useRestaurant(slug);
