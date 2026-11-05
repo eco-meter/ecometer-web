@@ -57,7 +57,10 @@ export default function EcoGauge({ total }) {
           <linearGradient id={waveGradientId} x1='0' y1='0' x2='0' y2='1'>
             <stop
               offset='0%'
-              style={{ stopColor: "var(--color-brand-green)", stopOpacity: 0.65 }}
+              style={{
+                stopColor: "var(--color-brand-green)",
+                stopOpacity: 0.65,
+              }}
             />
             <stop
               offset='100%'
@@ -109,6 +112,7 @@ export default function EcoGauge({ total }) {
           />
           {!reducedMotion && (
             <g
+              className='eco-gauge__fluid'
               aria-hidden='true'
               style={{ transform: `translateY(${offset}px)` }}
             >
