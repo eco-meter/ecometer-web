@@ -68,8 +68,8 @@
 }
 
 .eco-gauge__bulb-label {
-  font-size: 22px;
-  letter-spacing: 0.08em;
+  font-size: 21px;
+  font-weight: 700;
 }
 
 .eco-gauge__value {
@@ -82,7 +82,8 @@
 }
 
 .eco-gauge__max {
-  font-size: 26px;
+  font-size: 21px;
+  font-weight: 700;
 }
 
 .eco-gauge__wave {

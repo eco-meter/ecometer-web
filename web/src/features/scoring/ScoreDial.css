@@ -9,22 +9,26 @@
   display: block;
   width: 100%;
   height: 100%;
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) /* progress starts at 12 o'clock */;
+}
+
+.score-dial__disc {
+  fill: #f8fcf8;
+  stroke: #e8f5f1;
+  stroke-width: 3;
 }
 
 .score-dial__track,
 .score-dial__progress {
   fill: none;
-  stroke-width: 7;
 }
 
 .score-dial__track {
-  stroke: var(--color-white);
+  stroke: #c9e9d9;
 }
 
 .score-dial__progress {
   stroke: var(--color-brand-green);
-  stroke-linecap: round;
 }
 
 .score-dial__value {
@@ -35,7 +39,14 @@
   justify-content: center;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: calc(var(--dial-size) * 0.24);
-  color: var(--color-green-deepest);
+  color: #0b4a3c;
   font-variant-numeric: tabular-nums;
+}
+
+.score-dial--ring .score-dial__value {
+  font-size: 14px;
+}
+
+.score-dial--badge .score-dial__value {
+  font-size: 25px;
 }

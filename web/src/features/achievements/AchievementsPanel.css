@@ -4,7 +4,7 @@
   position: relative;
   isolation: isolate; /* keeps the cream band behind the panel */
   max-width: 1157px;
-  margin: var(--space-16) auto 0;
+  margin: 42px auto 0;
 }
 
 /* Full-width cream band behind the lower part of the panel,
@@ -13,7 +13,7 @@
   content: "";
   position: absolute;
   z-index: -1;
-  top: 62px;
+  top: 20px;
   bottom: calc(-1 * var(--space-16)); /* cancels the page's bottom padding */
   left: 0;
   right: 0;
