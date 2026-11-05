@@ -24,6 +24,7 @@ function scoreToY(score) {
 export default function EcoGauge({ total }) {
   const ref = useRef(null);
   const gradientId = useId();
+  const waveGradientId = useId();
   const clipId = useId();
 
   const reducedMotion = usePrefersReducedMotion();
@@ -52,6 +53,16 @@ export default function EcoGauge({ total }) {
           <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
             <stop offset='0%' className='eco-gauge__stop--top' />
             <stop offset='100%' className='eco-gauge__stop--bottom' />
+          </linearGradient>
+          <linearGradient id={waveGradientId} x1='0' y1='0' x2='0' y2='1'>
+            <stop
+              offset='0%'
+              style={{ stopColor: "var(--color-brand-green)", stopOpacity: 0.65 }}
+            />
+            <stop
+              offset='100%'
+              style={{ stopColor: "var(--color-brand-green)", stopOpacity: 0 }}
+            />
           </linearGradient>
           <clipPath id={clipId}>
             <rect
@@ -96,6 +107,21 @@ export default function EcoGauge({ total }) {
             fill={`url(#${gradientId})`}
             style={{ transform: `translateY(${offset}px)` }}
           />
+          {!reducedMotion && (
+            <g
+              aria-hidden='true'
+              style={{ transform: `translateY(${offset}px)` }}
+            >
+              <path
+                className='eco-gauge__wave'
+                d={`M${CHANNEL.x},${SCALE_TOP + CHANNEL.radius}
+                    A${CHANNEL.radius},${CHANNEL.radius} 0 0 1 ${CHANNEL.x + CHANNEL.width},${SCALE_TOP + CHANNEL.radius}
+                    L${CHANNEL.x + CHANNEL.width},${SCALE_TOP + CHANNEL.radius + 60}
+                    L${CHANNEL.x},${SCALE_TOP + CHANNEL.radius + 60} Z`}
+                fill={`url(#${waveGradientId})`}
+              />
+            </g>
+          )}
         </g>
 
         {/* Bulb */}

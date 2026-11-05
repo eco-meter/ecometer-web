@@ -85,8 +85,25 @@
   font-size: 26px;
 }
 
+.eco-gauge__wave {
+  animation: eco-gauge-wave 3.2s ease-in-out infinite;
+}
+
+@keyframes eco-gauge-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .eco-gauge__fluid {
     transition: none;
+  }
+  .eco-gauge__wave {
+    animation: none;
   }
 }
