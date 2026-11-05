@@ -12,6 +12,13 @@
   padding-bottom: 15px;
 }
 
+.restaurant-info__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
 .restaurant-info__name {
   font-family: var(--font-heading);
   font-weight: 600;
@@ -25,6 +32,62 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-secondary);
+}
+
+/* Green chevron that folds the card */
+.restaurant-info__toggle {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-right: -6px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--color-brand-green);
+  cursor: pointer;
+}
+
+.restaurant-info__toggle svg {
+  width: 30px;
+  height: 30px;
+  transition: transform 0.25s ease;
+}
+
+.restaurant-info__toggle[aria-expanded="false"] svg {
+  transform: rotate(-90deg);
+}
+
+/* Everything below the name; animates open and closed */
+.restaurant-info__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.restaurant-info__body--open {
+  grid-template-rows: 1fr;
+}
+
+.restaurant-info__body-inner {
+  overflow: hidden;
+  /* room for the search box's focus ring inside the clipped area */
+  margin: -4px;
+  padding: 4px;
+}
+
+/* Once the open animation finishes, let the search results drop
+   out of the card instead of being cut off */
+.restaurant-info__body--open .restaurant-info__body-inner {
+  animation: restaurant-info-unclip 0s 0.3s forwards;
+}
+
+@keyframes restaurant-info-unclip {
+  to {
+    overflow: visible;
+  }
 }
 
 .restaurant-info__photo {
@@ -109,4 +172,15 @@
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .restaurant-info__body,
+  .restaurant-info__toggle svg {
+    transition: none;
+  }
+
+  .restaurant-info__body--open .restaurant-info__body-inner {
+    animation-delay: 0s;
+  }
 }

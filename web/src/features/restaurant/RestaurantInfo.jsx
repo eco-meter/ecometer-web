@@ -1,4 +1,6 @@
+import { useId, useState } from "react";
 import { Icon } from "@iconify/react";
+import RestaurantSearch from "./RestaurantSearch.jsx";
 import "./RestaurantInfo.css";
 
 const dateFormat = new Intl.DateTimeFormat("en-CA", {
@@ -37,10 +39,15 @@ function Stars({ rating }) {
   );
 }
 
-// Left column of the restaurant page: name, photo, description and details.
-// Rows only show when Ewan has filled in that field in Supabase.
+// Left column of the restaurant page: name, photo, description, details
+// and a search box. The chevron folds everything below the name away.
+// Detail rows only show when Ewan has filled in that field in Supabase.
 export default function RestaurantInfo({ restaurant }) {
+  const [open, setOpen] = useState(true);
+  const bodyId = useId();
+
   const {
+    slug,
     name,
     cuisine,
     photoUrl,
@@ -59,7 +66,21 @@ export default function RestaurantInfo({ restaurant }) {
   return (
     <article className='restaurant-info'>
       <header className='restaurant-info__header'>
-        <h1 className='restaurant-info__name'>{name}</h1>
+        <div className='restaurant-info__title-row'>
+          <h1 className='restaurant-info__name'>{name}</h1>
+          <button
+            type='button'
+            className='restaurant-info__toggle'
+            aria-expanded={open}
+            aria-controls={bodyId}
+            aria-label={
+              open ? "Hide restaurant details" : "Show restaurant details"
+            }
+            onClick={() => setOpen((current) => !current)}
+          >
+            <Icon icon='akar-icons:chevron-down' aria-hidden='true' />
+          </button>
+        </div>
         {scoreUpdatedAt && (
           <p className='restaurant-info__updated'>
             Score last updated:{" "}
@@ -68,46 +89,63 @@ export default function RestaurantInfo({ restaurant }) {
         )}
       </header>
 
-      {photoUrl ? (
-        <img src={photoUrl} alt='' className='restaurant-info__photo' />
-      ) : (
-        <div className='restaurant-info__photo restaurant-info__photo--empty' />
-      )}
+      <div
+        className={`restaurant-info__body ${open ? "restaurant-info__body--open" : ""}`}
+        id={bodyId}
+        inert={!open}
+      >
+        <div className='restaurant-info__body-inner'>
+          {photoUrl ? (
+            <img src={photoUrl} alt='' className='restaurant-info__photo' />
+          ) : (
+            <div className='restaurant-info__photo restaurant-info__photo--empty' />
+          )}
 
-      {description && (
-        <p className='restaurant-info__description'>{description}</p>
-      )}
+          {description && (
+            <p className='restaurant-info__description'>{description}</p>
+          )}
 
-      <dl className='restaurant-info__details'>
-        <div className='restaurant-info__row'>
-          <Icon icon='ph:fork-knife-fill' className='restaurant-info__icon' />
-          <dt>Cuisine</dt>
-          <dd>{cuisineLine}</dd>
+          <dl className='restaurant-info__details'>
+            <div className='restaurant-info__row'>
+              <Icon
+                icon='ph:fork-knife-fill'
+                className='restaurant-info__icon'
+              />
+              <dt>Cuisine</dt>
+              <dd>{cuisineLine}</dd>
+            </div>
+
+            {address && (
+              <div className='restaurant-info__row'>
+                <Icon
+                  icon='ph:map-pin-fill'
+                  className='restaurant-info__icon'
+                />
+                <dt>Address</dt>
+                <dd>{address}</dd>
+              </div>
+            )}
+
+            {rating != null && (
+              <div className='restaurant-info__row'>
+                <Icon icon='ph:star' className='restaurant-info__icon' />
+                <dt>Google Reviews</dt>
+                <dd className='restaurant-info__rating'>
+                  <span>{Number(rating).toFixed(1)}</span>
+                  <Stars rating={Number(rating)} />
+                  <span className='visually-hidden'>out of 5 stars</span>
+                  {reviewCount != null && (
+                    <span>({reviewCount.toLocaleString("en-CA")} reviews)</span>
+                  )}
+                </dd>
+              </div>
+            )}
+          </dl>
+
+          {/* key resets the search box when you open another restaurant */}
+          <RestaurantSearch key={slug} currentSlug={slug} />
         </div>
-
-        {address && (
-          <div className='restaurant-info__row'>
-            <Icon icon='ph:map-pin-fill' className='restaurant-info__icon' />
-            <dt>Address</dt>
-            <dd>{address}</dd>
-          </div>
-        )}
-
-        {rating != null && (
-          <div className='restaurant-info__row'>
-            <Icon icon='ph:star' className='restaurant-info__icon' />
-            <dt>Google Reviews</dt>
-            <dd className='restaurant-info__rating'>
-              <span>{Number(rating).toFixed(1)}</span>
-              <Stars rating={Number(rating)} />
-              <span className='visually-hidden'>out of 5 stars</span>
-              {reviewCount != null && (
-                <span>({reviewCount.toLocaleString("en-CA")} reviews)</span>
-              )}
-            </dd>
-          </div>
-        )}
-      </dl>
+      </div>
     </article>
   );
 }
