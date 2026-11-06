@@ -136,5 +136,6 @@ main:has(.restaurant-page) {
 
   .restaurant-page__layout .eco-gauge {
     width: min(100%, 200px);
+    justify-self: center;
   }
 }
