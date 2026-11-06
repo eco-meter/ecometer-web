@@ -70,7 +70,8 @@
 
 .metric-card__copy {
   position: relative;
-  max-width: 200px;
+  /* At least 200px; wider panels give the text the space left of the dial */
+  max-width: max(200px, 100% - 190px);
 }
 
 .metric-card__clouds {
@@ -145,6 +146,15 @@
 }
 
 @media (max-width: 480px) {
+  .metric-card__header {
+    gap: var(--space-3);
+  }
+
+  .metric-card__header .score-dial {
+    width: 64px;
+    height: 64px;
+  }
+
   .metric-card__title {
     font-size: 18px;
   }

@@ -11,6 +11,7 @@ const MAX_RESULTS = 5;
 export default function RestaurantSearch({ currentSlug }) {
   const { data: restaurants = [] } = useRestaurants();
   const [query, setQuery] = useState("");
+  const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
   const resultsId = useId();
 
@@ -33,7 +34,18 @@ export default function RestaurantSearch({ currentSlug }) {
   }
 
   return (
-    <form className='restaurant-search' role='search' onSubmit={handleSubmit}>
+    <form
+      className='restaurant-search'
+      role='search'
+      onSubmit={handleSubmit}
+      onFocus={() => setShowResults(true)}
+      onBlur={(event) => {
+        // Close when focus leaves the search box and its results
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setShowResults(false);
+        }
+      }}
+    >
       <div className='restaurant-search__field'>
         <Icon
           icon='basil:search-solid'
@@ -54,8 +66,14 @@ export default function RestaurantSearch({ currentSlug }) {
         />
       </div>
 
-      {trimmed && (
-        <div className='restaurant-search__results' id={resultsId}>
+      {showResults && trimmed && (
+        <div
+          className='restaurant-search__results'
+          id={resultsId}
+          // Keep focus in the input while clicking a result, so the
+          // list doesn't close before the click lands (Safari)
+          onPointerDown={(event) => event.preventDefault()}
+        >
           {results.length > 0 ? (
             <ul>
               {results.map((restaurant) => (
