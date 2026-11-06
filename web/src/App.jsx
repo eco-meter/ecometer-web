@@ -5,6 +5,7 @@ import Footer from "./components/layout/Footer.jsx";
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
 import Restaurant from "./pages/Restaurant.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function ScrollToHash() {
   const { pathname, hash } = useLocation();
@@ -35,6 +36,7 @@ export default function App() {
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<About />} />
           <Route path='/restaurant/:slug' element={<Restaurant />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

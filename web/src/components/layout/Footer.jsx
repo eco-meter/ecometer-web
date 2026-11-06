@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { CONTACT_HREF } from "../../lib/contact";
 import "./Footer.css";
 
 export default function Footer() {
@@ -13,8 +14,8 @@ export default function Footer() {
         <div className='footer__links'>
           <Link to='/about'>About</Link>
           <Link to='/about#scoring'>How it Works</Link>
-          <Link to='/about#cta'>For Restaurants</Link>
-          <Link to='/about#cta'>Contact</Link>
+          <Link to='/about#get-listed'>For Restaurants</Link>
+          <a href={CONTACT_HREF}>Contact</a>
         </div>
       </div>
 

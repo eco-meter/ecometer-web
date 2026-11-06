@@ -95,3 +95,13 @@
 .faq__question:active {
   opacity: 0.7;
 }
+
+.faq__answer a {
+  color: var(--color-green-dark);
+  font-weight: 600;
+}
+
+/* Leave room for the sticky nav when a link jumps to a question */
+.faq__item {
+  scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+}
