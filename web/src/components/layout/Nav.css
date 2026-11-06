@@ -54,7 +54,8 @@
   color: var(--color-brand-green);
 }
 
-.nav__cta {
+/* ".nav__links" in front so these beat the plain ".nav__links a" link styles */
+.nav__links .nav__cta {
   background: var(--color-brand-green);
   color: var(--color-cream);
   border: none;
@@ -65,8 +66,9 @@
   cursor: pointer;
 }
 
-.nav__cta:hover {
+.nav__links .nav__cta:hover {
   background: var(--color-green-dark);
+  color: var(--color-cream);
 }
 
 .nav__cta:active {

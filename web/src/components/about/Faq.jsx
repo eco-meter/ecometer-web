@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { CONTACT_EMAIL, CONTACT_HREF } from "../../lib/contact";
 import "./Faq.css";
 
 const faqs = [
@@ -35,14 +37,37 @@ const faqs = [
       "EcoMeter\u2019s scoring system focuses specifically on the weight of solid waste that goes from restaurants to landfills. For that reason, we can\u2019t include other factors that add to a restaurant\u2019s carbon footprint like energy and water usage. We instead address this by awarding additional but separate achievements verified through partnerships with other organizations. See our list of partners for more.",
   },
   {
+    id: "get-listed", // "For Restaurants" in the nav and footer links here
     question: "How do I suggest a restaurant?",
-    answer:
-      "If you or someone you know owns or works at a restaurant you want listed on our website, visit our contact page to get in touch!",
+    answer: (
+      <>
+        If you or someone you know owns or works at a restaurant you want listed
+        on our website, email us at <a href={CONTACT_HREF}>{CONTACT_EMAIL}</a>{" "}
+        to get in touch!
+      </>
+    ),
   },
 ];
 
+// Index of the question whose id matches the URL hash, or -1.
+function findLinkedIndex(hash) {
+  return faqs.findIndex((item) => item.id && `#${item.id}` === hash);
+}
 export default function Faq() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const { hash } = useLocation();
+  const [openIndex, setOpenIndex] = useState(() => {
+    const linked = findLinkedIndex(hash);
+    return linked === -1 ? 0 : linked;
+  });
+
+  // Arriving from a link like /about#get-listed opens that question,
+  // including when you're already on this page.
+  const [lastHash, setLastHash] = useState(hash);
+  if (hash !== lastHash) {
+    setLastHash(hash);
+    const linked = findLinkedIndex(hash);
+    if (linked !== -1) setOpenIndex(linked);
+  }
 
   const toggle = (i) => {
     setOpenIndex(openIndex === i ? null : i);
@@ -56,7 +81,7 @@ export default function Faq() {
         {faqs.map((item, i) => {
           const isOpen = openIndex === i;
           return (
-            <div className='faq__item' key={item.question}>
+            <div className='faq__item' key={item.question} id={item.id}>
               <button className='faq__question' onClick={() => toggle(i)}>
                 <span>{item.question}</span>
                 <span className='faq__icon'>{isOpen ? "\u2212" : "+"}</span>
