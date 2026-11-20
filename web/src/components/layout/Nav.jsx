@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { CONTACT_HREF } from "../../lib/contact";
+import { APP_HREF, CONTACT_HREF } from "../../lib/contact";
 import "./Nav.css";
 
 export default function Nav() {
@@ -21,9 +21,14 @@ export default function Nav() {
           <Link to='/about#scoring' onClick={() => setOpen(false)}>
             How it Works
           </Link>
-          <Link to='/about#get-listed' onClick={() => setOpen(false)}>
+          <a
+            href={APP_HREF}
+            target='_blank'
+            rel='noreferrer'
+            onClick={() => setOpen(false)}
+          >
             For Restaurants
-          </Link>
+          </a>
           <a
             href={CONTACT_HREF}
             className='nav__cta'
