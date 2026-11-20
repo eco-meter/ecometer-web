@@ -1,5 +1,6 @@
 import { Component, Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import { useRestaurants } from "../../hooks/useRestaurants.js";
 import { useRegions } from "../../hooks/useRegions.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
@@ -9,6 +10,7 @@ import { RegionPicker } from "./RegionPicker";
 import "./globe.css";
 
 const GlobeCanvas = lazy(() => import("./GlobeCanvas.jsx"));
+const MapPanel = lazy(() => import("../map/MapPanel.jsx"));
 
 const EMPTY = [];
 
@@ -53,12 +55,15 @@ export default function GlobeSection({ fallbackSrc }) {
   const inView = useInView(stageRef);
   const [webglSupported] = useState(hasWebGL);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [mapOpen, setMapOpen] = useState(false);
 
   // Ignore ?region= values that don't exist on the globe
   const requestedSlug = searchParams.get("region");
   const activeSlug =
     requestedSlug && REGION_PLACEMENTS[requestedSlug] ? requestedSlug : null;
   const focus = activeSlug ? REGION_PLACEMENTS[activeSlug] : null;
+
+  const activeRegion = regions.find((region) => region.slug === activeSlug);
 
   const pickableRegions = regions.filter(
     (region) => REGION_PLACEMENTS[region.slug],
@@ -92,26 +97,46 @@ export default function GlobeSection({ fallbackSrc }) {
 
   return (
     <div className='globe-section'>
-      <RegionPicker
-        regions={pickableRegions}
-        activeSlug={activeSlug}
-        onSelect={selectRegion}
-      />
-      <div className='globe-stage' ref={stageRef}>
-        {webglSupported ? (
-          <GlobeErrorBoundary fallback={fallback}>
-            <Suspense fallback={fallback}>
-              <GlobeCanvas
-                reducedMotion={reducedMotion}
-                animateClouds={inView && !reducedMotion}
-                focus={focus}
-                restaurants={restaurants}
-                regions={regions}
-              />
-            </Suspense>
-          </GlobeErrorBoundary>
-        ) : (
-          fallback
+      <div className='globe-controls'>
+        <RegionPicker
+          regions={pickableRegions}
+          activeSlug={activeSlug}
+          onSelect={selectRegion}
+        />
+        <button
+          type='button'
+          className='map-toggle'
+          aria-pressed={mapOpen}
+          onClick={() => setMapOpen((open) => !open)}
+        >
+          <Icon icon='akar-icons:map' aria-hidden='true' />
+          {mapOpen ? "Hide map" : "Show map"}
+        </button>
+      </div>
+
+      <div className={mapOpen ? "globe-layout--split" : undefined}>
+        <div className='globe-stage' ref={stageRef}>
+          {webglSupported ? (
+            <GlobeErrorBoundary fallback={fallback}>
+              <Suspense fallback={fallback}>
+                <GlobeCanvas
+                  reducedMotion={reducedMotion}
+                  animateClouds={inView && !reducedMotion}
+                  focus={focus}
+                  restaurants={restaurants}
+                  regions={regions}
+                />
+              </Suspense>
+            </GlobeErrorBoundary>
+          ) : (
+            fallback
+          )}
+        </div>
+
+        {mapOpen && (
+          <Suspense fallback={<div className='map-panel' />}>
+            <MapPanel restaurants={restaurants} region={activeRegion} />
+          </Suspense>
         )}
       </div>
     </div>
