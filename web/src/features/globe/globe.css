@@ -243,3 +243,64 @@
   );
   clip-path: inset(0 calc(100% - var(--fill)) 0 0 round var(--radius-pill));
 }
+
+/* Region picker and map toggle in one row */
+.globe-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--content-margin);
+}
+
+.globe-controls .region-picker {
+  padding-inline: 0;
+}
+
+.map-toggle {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 18px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-white);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.map-toggle[aria-pressed="true"] {
+  border-color: var(--color-green-dark);
+  background: var(--color-green-tint);
+  color: var(--color-green-deepest);
+}
+
+.map-toggle:focus-visible {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
+}
+
+/* Globe and map side by side, stacking on narrow screens */
+.globe-layout--split {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin-inline: auto;
+  padding-inline: var(--content-margin);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.globe-layout--split .globe-stage {
+  flex: 1 1 420px;
+  min-width: 0;
+}
+
+.globe-layout--split .map-panel {
+  flex: 1.25 1 520px;
+}
