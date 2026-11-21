@@ -33,7 +33,7 @@
   border-radius: var(--radius-md);
   box-shadow: 0 8px 20px rgba(20, 20, 20, 0.14);
   font-family: var(--font-body);
-  color: var(--colors-text);
+  color: var(--color-text);
 }
 
 .pin-card__photo {
