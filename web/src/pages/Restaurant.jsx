@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useRestaurant } from "../hooks/useRestaurants.js";
@@ -15,6 +16,7 @@ import leaf4 from "../assets/restaurant/leaf-4.svg";
 import leaf5 from "../assets/restaurant/leaf-5.svg";
 import leaf6 from "../assets/restaurant/leaf-6.svg";
 
+const RestaurantMap = lazy(() => import("../features/map/RestaurantMap.jsx"));
 // Decorative leaves scattered behind the layout (desktop only).
 // Positions live in Restaurant.css.
 const LEAVES = [leaf1, leaf2, leaf3, leaf4, leaf5, leaf6];
@@ -52,6 +54,9 @@ export default function Restaurant() {
             </p>
           )}
           <RestaurantInfo restaurant={restaurant} />
+          <Suspense fallback={null}>
+            <RestaurantMap restaurant={restaurant} />
+          </Suspense>
         </div>
 
         <EcoGauge total={getTotal(restaurant)} />
