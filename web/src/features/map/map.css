@@ -25,14 +25,51 @@
   position: absolute;
   top: var(--space-4);
   left: var(--space-4);
-  width: min(268px, calc(100% - 32px));
-  padding: 14px var(--space-4) var(--space-4);
+  width: min(300px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: 0 8px 20px rgba(20, 20, 20, 0.14);
   font-family: var(--font-body);
   color: var(--color-text);
+}
+
+.pin-card__photo {
+  position: relative;
+  height: 104px;
+  background: var(--color-green-tint);
+}
+
+.pin-card__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pin-card__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.pin-card__close:hover {
+  background: var(--color-cream);
+}
+
+.pin-card__body {
+  padding: 14px var(--space-4) var(--space-4);
 }
 
 .pin-card__top {
@@ -66,25 +103,8 @@
   flex-shrink: 0;
 }
 
-.pin-card__close {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  margin: -6px -8px 0 0;
-  border: 0;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-}
-
-.pin-card__close:hover {
-  background: var(--color-cream);
-}
-
 .pin-card__verified {
-  margin-top: 10px;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -96,8 +116,48 @@
   font-weight: 600;
 }
 
-.pin-card__score {
+/* Three category score bars */
+.pin-card__scores {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pin-card__score-row {
+  display: grid;
+  grid-template-columns: 76px 1fr 28px;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.pin-card__bar {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.pin-card__bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-brand-green);
+}
+
+.pin-card__value {
+  font-weight: 600;
+  text-align: right;
+  color: var(--color-text);
+}
+
+.pin-card__total-row {
   margin-top: var(--space-3);
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -119,34 +179,40 @@
   color: var(--color-text-secondary);
 }
 
-.pin-card__bar {
-  margin-top: 6px;
-  height: 6px;
-  border-radius: var(--radius-pill);
-  background: var(--color-border);
-  overflow: hidden;
+/* View restaurant and Directions */
+.pin-card__actions {
+  margin-top: var(--space-3);
+  display: flex;
+  gap: var(--space-2);
 }
 
-.pin-card__bar div {
-  height: 100%;
-  background: var(--color-brand-green);
-}
-
-.pin-card__link {
-  margin-top: 14px;
+.pin-card__link,
+.pin-card__directions {
   min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   border-radius: var(--radius-md);
-  background: var(--color-brand-green);
-  color: var(--color-text);
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
+  color: var(--color-text);
+}
+
+.pin-card__link {
+  flex: 1;
+  background: var(--color-brand-green);
 }
 
 .pin-card__link:hover {
   background: var(--color-green-light);
+}
+
+.pin-card__directions {
+  padding: 0 14px;
+  border: 1.5px solid var(--color-text);
+}
+
+.pin-card__directions:hover {
+  background: var(--color-cream);
 }
