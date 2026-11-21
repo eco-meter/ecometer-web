@@ -88,6 +88,12 @@ export default function GlobeCanvas({
       dpr={[1, 2]}
       camera={{ position: [0, 0, 7], fov: FOV }}
       gl={{ antialias: true, alpha: true }}
+      onCreated={({ gl, invalidate }) => {
+        // Redraw the globe if the phone restores the 3D context
+        gl.domElement.addEventListener("webglcontextrestored", () =>
+          invalidate(),
+        );
+      }}
     >
       <directionalLight position={[5, 5.5, 5.5]} intensity={2.6} />
       <hemisphereLight args={["#ffffff", "#5b8a5f", 0.55]} />

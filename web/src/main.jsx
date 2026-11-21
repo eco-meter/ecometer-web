@@ -7,6 +7,11 @@ import "./styles/tokens.css";
 import "./index.css";
 import App from "./App.jsx";
 
+// If a page file fails to laod (usually rtght after a redeploy), reload to get the new version
+window.addEventListener("vite:preloadError", () => {
+  window.location.reload();
+});
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>

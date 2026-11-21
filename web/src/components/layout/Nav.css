@@ -139,15 +139,18 @@
     transform: translateY(-8px);
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
     transition:
       transform 0.2s ease,
-      opacity 0.2s;
+      opacity 0.2s,
+      visibility 0.2s;
   }
 
   .nav__links--open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+    visibility: visible;
   }
 
   .nav__links .nav__cta {
