@@ -1,0 +1,96 @@
+.restaurant-search {
+  position: relative;
+  margin-top: var(--space-4);
+}
+
+.restaurant-search__field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 56px;
+  padding: 0 var(--space-4);
+  background: var(--color-white);
+  border: 2px solid var(--color-brand-green);
+  border-radius: var(--radius-md);
+}
+
+.restaurant-search__field:focus-within {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
+}
+
+.restaurant-search__icon {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  color: var(--color-black);
+}
+
+.restaurant-search__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.restaurant-search__input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.restaurant-search__input:focus {
+  outline: none; /* the field shows the focus ring instead */
+}
+
+/* Results dropdown */
+.restaurant-search__results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  padding: var(--space-2);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 16px rgba(20, 20, 20, 0.08);
+}
+
+.restaurant-search__results ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.restaurant-search__results a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.restaurant-search__results a:hover,
+.restaurant-search__results a:focus-visible {
+  background: var(--color-green-tint);
+}
+
+.restaurant-search__name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.restaurant-search__meta,
+.restaurant-search__empty {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.restaurant-search__empty {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+}

@@ -1,0 +1,157 @@
+.nav {
+  background: var(--color-cream);
+  height: var(--nav-height);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav__inner {
+  width: 100%;
+  max-width: calc(var(--max-content-width) + 2 * var(--content-margin));
+  margin: 0 auto;
+  padding: 0 var(--content-margin);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+.nav__logo {
+  display: block;
+  line-height: 0;
+}
+
+.nav__logo img {
+  width: 120px;
+  height: 60px;
+  display: block;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  font-size: 14px;
+}
+
+.nav__links a:first-child,
+.nav__cta {
+  margin-left: auto;
+}
+
+.nav__links a {
+  color: var(--color-black);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.nav__links a:hover {
+  color: var(--color-brand-green);
+}
+
+/* ".nav__links" in front so these beat the plain ".nav__links a" link styles */
+.nav__links .nav__cta {
+  background: var(--color-brand-green);
+  color: var(--color-cream);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nav__links .nav__cta:hover {
+  background: var(--color-green-dark);
+  color: var(--color-cream);
+}
+
+.nav__cta:active {
+  transform: scale(0.97);
+}
+
+.nav__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav__hamburger span {
+  width: 22px;
+  height: 2px;
+  background: var(--color-text);
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.nav__hamburger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav__hamburger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__hamburger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .nav__inner {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+  }
+
+  .nav__links a:first-child,
+  .nav__links .nav__cta {
+    margin-left: 0;
+  }
+
+  .nav__cta {
+    display: none; /* nowq lives inside the dropdown*/
+  }
+
+  .nav__hamburger {
+    display: flex;
+  }
+
+  .nav__links {
+    display: flex;
+    position: absolute;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background: var(--color-cream);
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    align-items: stretch;
+    padding: var(--space-4) var(--content-margin);
+    gap: var(--space-4);
+    transform: translateY(-8px);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s;
+  }
+
+  .nav__links--open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav__links .nav__cta {
+    display: inline-flex;
+    justify-content: center;
+  }
+}

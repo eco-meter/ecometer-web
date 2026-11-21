@@ -1,0 +1,9 @@
+<svg width="459" height="103" viewBox="0 0 459 103" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 12C0 5.37259 5.37258 0 12 0H447C453.627 0 459 5.37258 459 12V89.9909C411.874 78.196 361.683 89.9909 312.258 92.1751C249.423 95.2331 205.362 107.028 146.359 100.912C86.9725 94.7962 48.2755 85.6224 0 96.9805V12Z" fill="url(#sky)"/>
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="43.7224" y2="195.514" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F0FAF4"/>
+<stop offset="1" stop-color="#E7F6EE"/>
+</linearGradient>
+</defs>
+</svg>

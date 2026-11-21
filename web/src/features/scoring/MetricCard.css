@@ -1,0 +1,190 @@
+/* Measurements from the "Collapsed / Expanded waste score" frames in Figma */
+.metric-card {
+  background: var(--color-green-tint);
+  border: 3px solid var(--color-brand-green);
+  border-radius: 24px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Header row (the whole row is the button) */
+.metric-card__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: 13px 21px; /* 16px / 24px in Figma, minus the 3px border */
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: center;
+  color: #0d2c3b;
+}
+
+.metric-card__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.metric-card__chevron {
+  width: 25px;
+  height: 25px;
+  color: var(--color-text);
+  transition: transform 0.25s ease;
+}
+
+.metric-card--open .metric-card__chevron {
+  transform: rotate(180deg);
+}
+
+/* Expanding panel: animates from 0 to its natural height */
+.metric-card__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.metric-card--open .metric-card__panel {
+  grid-template-rows: 1fr;
+}
+
+.metric-card__panel-inner {
+  overflow: hidden;
+}
+
+/* Illustrated panel: wavy sky band on top, warm white below,
+   clouds top right, meadow bottom right */
+.metric-card__explainer {
+  position: relative;
+  min-height: 248px;
+  margin: -3px 21px 24px; /* sits 10px under the dial row, like Figma */
+  padding: 31px 29px 48px;
+  border-radius: var(--radius-md);
+  background:
+    url("../../assets/restaurant/score-sky.svg") top / 100% 103px no-repeat,
+    #fbfaf7;
+  overflow: hidden;
+}
+
+.metric-card__copy {
+  position: relative;
+  /* At least 200px; wider panels give the text the space left of the dial */
+  max-width: max(200px, 100% - 190px);
+}
+
+.metric-card__clouds {
+  position: absolute;
+  top: 19px;
+  right: 24px;
+  width: 195px;
+}
+
+.metric-card__heading {
+  max-width: 189px;
+  margin-bottom: 32px; /* puts the body text below the sky band */
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.25;
+  color: var(--color-text-secondary);
+}
+
+.metric-card__description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.25;
+  color: var(--color-text-secondary);
+}
+
+/* Badge dial with its sparks and ground shadow */
+.metric-card__scene {
+  position: absolute;
+  right: 63px;
+  bottom: 42px;
+  z-index: 1;
+  width: 101px;
+  height: 96px;
+}
+
+.metric-card__scene .score-dial {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  z-index: 1;
+}
+
+.metric-card__sparks {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 19px;
+  height: 20px;
+  fill: none;
+  stroke: #fdbb27;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.metric-card__dial-shadow {
+  position: absolute;
+  right: 15px;
+  bottom: -13px;
+  width: 59px;
+  height: 13px;
+  border-radius: 50%;
+  background: #8cc743;
+}
+
+.metric-card__greenery {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 292px;
+  max-width: 64%;
+}
+
+@media (max-width: 480px) {
+  .metric-card__header {
+    gap: var(--space-3);
+  }
+
+  .metric-card__header .score-dial {
+    width: 64px;
+    height: 64px;
+  }
+
+  .metric-card__title {
+    font-size: 18px;
+  }
+
+  .metric-card__explainer {
+    margin-inline: var(--space-3);
+    padding: var(--space-6) var(--space-4) 72px;
+  }
+
+  .metric-card__copy,
+  .metric-card__heading {
+    max-width: none;
+  }
+
+  .metric-card__heading {
+    margin-bottom: var(--space-8);
+  }
+
+  .metric-card__scene {
+    display: none;
+  }
+
+  .metric-card__greenery {
+    max-width: 80%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metric-card__panel,
+  .metric-card__chevron {
+    transition: none;
+  }
+}

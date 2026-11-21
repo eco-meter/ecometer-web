@@ -1,0 +1,153 @@
+.restaurant-listings {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 10px var(--content-margin);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Heading + arrows */
+.restaurant-listings__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.restaurant-listings__heading {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: clamp(26px, 5vw + 1rem, 52px);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.restaurant-listings__arrows {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.restaurant-listings__arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-cream);
+  color: var(--color-brand-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.restaurant-listings__arrow:hover {
+  background: #e3f5ea;
+  transform: scale(1.08);
+}
+
+.restaurant-listings__arrow:active {
+  transform: scale(0.95);
+}
+
+.restaurant-listings__arrow:focus-visible {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
+}
+
+.restaurant-listings__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.restaurant-listings__arrow:disabled:hover,
+.restaurant-listings__arrow:disabled:active {
+  background: var(--color-cream);
+  transform: none;
+}
+
+/* Loading error / empty state */
+.restaurant-listings__message {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* One scrolling row at every screen size. Desktop shows 3 cards. */
+.restaurant-listings__row {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 0;
+}
+
+.restaurant-listings__row::-webkit-scrollbar {
+  display: none;
+}
+
+.restaurant-listings__row > .restaurant-card {
+  flex: 0 0 calc((100% - 64px) / 3);
+  scroll-snap-align: start;
+}
+
+/* Pagination dots */
+.restaurant-listings__pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  cursor: pointer;
+}
+
+button.dot {
+  border: none;
+  padding: 0;
+}
+
+.dot--active {
+  background: var(--color-brand-green);
+}
+
+.dot:focus-visible {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
+}
+
+/* Tablet: 2 cards */
+@media (max-width: 900px) {
+  .restaurant-listings__row > .restaurant-card {
+    flex-basis: calc((100% - 32px) / 2);
+  }
+
+  .restaurant-listings__heading {
+    font-size: 38px;
+  }
+}
+
+/* Mobile: 1 card peeking, swipe + dots only */
+@media (max-width: 640px) {
+  .restaurant-listings__row {
+    margin: 0 calc(var(--content-margin) * -1);
+    padding: 10px var(--content-margin);
+    scroll-padding-left: var(--content-margin);
+  }
+
+  .restaurant-listings__row > .restaurant-card {
+    flex-basis: 82%;
+    scroll-snap-align: center;
+  }
+
+  .restaurant-listings__arrows {
+    display: none;
+  }
+}

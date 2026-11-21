@@ -1,0 +1,152 @@
+.map-panel {
+  position: relative;
+  min-width: 0;
+  height: min(70vh, 640px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-green-tint);
+}
+
+.map-panel--empty {
+  display: grid;
+  place-items: center;
+  color: var(--color-text-secondary);
+}
+
+.map-pin {
+  display: block;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 2px rgba(20, 20, 20, 0.2));
+}
+
+/* Card for the selected pin */
+.pin-card {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  width: min(268px, calc(100% - 32px));
+  padding: 14px var(--space-4) var(--space-4);
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 20px rgba(20, 20, 20, 0.14);
+  font-family: var(--font-body);
+  color: var(--color-text);
+}
+
+.pin-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.pin-card__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.pin-card__meta {
+  margin: var(--space-1) 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.pin-card__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pin-card__close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin: -6px -8px 0 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.pin-card__close:hover {
+  background: var(--color-cream);
+}
+
+.pin-card__verified {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-green-tint);
+  color: var(--color-green-deepest);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pin-card__score {
+  margin-top: var(--space-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.pin-card__total {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--color-text);
+}
+
+.pin-card__total span {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.pin-card__bar {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.pin-card__bar div {
+  height: 100%;
+  background: var(--color-brand-green);
+}
+
+.pin-card__link {
+  margin-top: 14px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-green);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pin-card__link:hover {
+  background: var(--color-green-light);
+}
