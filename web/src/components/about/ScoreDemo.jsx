@@ -154,7 +154,6 @@ export default function ScoreDemo() {
         <div className='score-demo__preview'>
           <p className='score-demo__preview-label'>ECOMETER SCORE</p>
           <p className='score-demo__preview-number'>{totalScore}</p>
-          <p className='score-demo__preview-tier'>Green Standard</p>
         </div>
       </div>
 

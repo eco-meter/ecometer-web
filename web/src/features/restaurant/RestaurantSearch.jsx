@@ -8,7 +8,10 @@ const MAX_RESULTS = 5;
 
 // "Search for another restaurant" box at the bottom of the info card.
 // Matches names as you type. Enter opens the first match.
-export default function RestaurantSearch({ currentSlug }) {
+export default function RestaurantSearch({
+  currentSlug,
+  placeholder = "Search for another restaurant...",
+}) {
   const { data: restaurants = [] } = useRestaurants();
   const [query, setQuery] = useState("");
   const [showResults, setShowResults] = useState(false);
@@ -55,8 +58,8 @@ export default function RestaurantSearch({ currentSlug }) {
         <input
           type='search'
           className='restaurant-search__input'
-          placeholder='Search for another restaurant...'
-          aria-label='Search for another restaurant'
+          placeholder={placeholder}
+          aria-label={placeholder.replace(/\.+$/, "")}
           aria-controls={resultsId}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
