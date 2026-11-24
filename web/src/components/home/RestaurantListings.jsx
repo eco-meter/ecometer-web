@@ -109,7 +109,7 @@ export default function RestaurantListings() {
             <button
               className='restaurant-listings__arrow'
               aria-label='Next restaurants'
-              disabled={activeIndex >= positions - 1}
+              disabled={activeIndex >= pageCount - 1}
               onClick={() => scrollToIndex(activeIndex + 1)}
             >
               <Icon icon='mdi:arrow-right' width={24} height={24} />
@@ -142,7 +142,7 @@ export default function RestaurantListings() {
 
           {showControls && (
             <div className='restaurant-listings__pagination'>
-              {Array.from({ length: positions }, (_, i) => (
+              {Array.from({ length: pageCount }, (_, i) => (
                 <button
                   key={i}
                   className={`dot ${i === activeIndex ? "dot--active" : ""}`}
