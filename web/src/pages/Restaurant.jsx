@@ -7,6 +7,7 @@ import RestaurantInfo from "../features/restaurant/RestaurantInfo.jsx";
 import EcoGauge from "../features/gauge/EcoGauge.jsx";
 import MetricCards from "../features/scoring/MetricCards.jsx";
 import AchievementsPanel from "../features/achievements/AchievementsPanel.jsx";
+import NotFound from "./NotFound.jsx";
 import "./Restaurant.css";
 
 import leaf1 from "../assets/restaurant/leaf-1.svg";
@@ -30,8 +31,7 @@ export default function Restaurant() {
   if (isPending) return <p className='restaurant-page__status'>Loading...</p>;
   if (isError)
     return <p className='restaurant-page__status'>Something went wrong.</p>;
-  if (!restaurant)
-    return <p className='restaurant-page__status'>Restaurant not found.</p>;
+  if (!restaurant) return <NotFound />;
 
   return (
     <section className='restaurant-page'>
